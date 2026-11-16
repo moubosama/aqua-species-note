@@ -1,0 +1,9 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+<ul class="cards">
+{{ range (where site.RegularPages "Section" "species") }}
+<li><a href="{{ .RelPermalink }}"><strong>{{ .Title }}</strong><span>{{ .Params.scientific }}</span><small>{{ .Description }}</small></a></li>
+{{ end }}
+</ul>
+{{ end }}

@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ if not .IsHome }}{{ .Title }} | {{ end }}{{ site.Title }}</title>
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+{{ if site.Params.test.noindex }}<meta name="robots" content="noindex,nofollow">{{ end }}
+<link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+</head>
+<body>
+<header class="site"><a href="{{ "/" | relURL }}">{{ site.Title }}</a></header>
+<main>{{ block "main" . }}{{ end }}</main>
+<footer class="site">情報は各ページの更新日時点のものです。飼育は自己責任でお願いします。</footer>
+</body>
+</html>

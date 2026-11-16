@@ -1,0 +1,5 @@
+# 有料ガイドの原稿は公開リポジトリに入れない
+guide/
+site/public/
+site/.hugo_build.lock
+site/resources/

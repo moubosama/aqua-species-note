@@ -1,0 +1,9 @@
+{{ define "main" }}
+<article>
+<h1>{{ .Title }}</h1>
+{{ with .Params.scientific }}<p class="sci">{{ . }}</p>{{ end }}
+{{ with .Params.facts }}<table class="facts">{{ range . }}<tr><th>{{ .k }}</th><td>{{ .v }}</td></tr>{{ end }}</table>{{ end }}
+<p class="updated">更新日: {{ .Lastmod.Format "2006-01-02" }}</p>
+{{ .Content }}
+</article>
+{{ end }}
