@@ -5,7 +5,7 @@
   "（&#34;）や &（&amp;）が値に入っていても、属性が途中で切れない。
 */ -}}
 {{- $caption := .Attributes.caption | default "" -}}
-<div class="scroll" tabindex="0" role="region" aria-label="{{ $caption | default "表" }}">
+<div class="scroll" tabindex="0" role="region" aria-label="{{ $caption | default (T "table") }}">
 <table
   {{- range $k, $v := .Attributes }}
     {{- if and $v (ne $k "caption") }}{{ printf " %s=\"%s\"" $k (htmlEscape (string $v)) | safeHTMLAttr }}{{ end }}

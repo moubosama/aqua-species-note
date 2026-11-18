@@ -2,6 +2,7 @@
 
 a・link の href、img・script の src、og:url を調べる。外のサイトへのリンクは確かめない
 （ネットにつながずに動くようにするため）。
+行き先が空の <a href=""> もリンク切れにする（英語版の原稿がないページを、メニューが指したときに出る）。
 """
 from __future__ import annotations
 
@@ -33,7 +34,8 @@ def find_target(rel: str, site: Site) -> Optional[str]:
 
 
 def check_page(page: Page, site: Site, config: Config, ids_cache: dict) -> list[str]:
-    problems = []
+    problems = [f"リンク先が空です: 「{' '.join(a.text().split())}」"
+                for a in page.root.find_all("a") if "href" in a.attrs and not a.get("href").strip()]
     for href in sorted(set(page_links(page))):
         resolved = resolve_href(href, page.rel, config)
         if resolved is None:

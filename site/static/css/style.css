@@ -21,6 +21,8 @@ header.site .brand{display:flex;align-items:center;gap:10px;color:var(--fg);text
 header.site .brand svg{color:var(--accent)}
 header.site nav a{display:inline-block;padding:10px 0;text-decoration:none;font-size:.95em}
 header.site nav a[aria-current="page"]{font-weight:700;border-bottom:2px solid var(--accent)}
+/* 言語の切り替え（English／日本語）。メニューと区切り線で分ける */
+header.site nav .lang{border-left:1px solid var(--line);padding-left:16px}header.site nav .lang a{padding:10px 4px;min-height:24px}
 footer.site{background:var(--foot-bg);color:var(--foot);font-size:.88em;line-height:1.8}
 footer.site .wrap{padding-top:36px;padding-bottom:36px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 32px}
 footer.site p{margin:0;max-width:40em}footer.site .brand-name{font-size:1.25em;color:#fff}

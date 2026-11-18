@@ -1,23 +1,24 @@
 {{- /*
-  繁殖記録の表（FR1.3）。フロントマターの [[breeding]] から作る。分からない欄は「記録なし」。
-  「誰が」の欄の頭に、確認の状態（status）の印を出す。
+  繁殖記録の表（FR1.3）。フロントマターの [[breeding]] から作る。分からない欄は「記録なし」（英語版は「No record」）。
+  「誰が」の欄の頭に、確認の状態（status）の印を出す。status の値は原稿に日本語のまま書き、
+  画面の印の言葉は i18n の badge_ok・badge_warn・badge_none。列の名前・空の文言も site/i18n/*.toml。
   出典は［n］の形で出し、ページ全体の出典リンクの処理（cite.html）でリンクになる。
 */ -}}
 {{- $rows := .Params.breeding -}}
 {{- $keys := slice "who" "when" "water" "trigger" "eggs" "hatch_days" "fry" "failures" -}}
-{{- $heads := slice "誰が" "いつ" "どんな水で" "きっかけ" "卵の数" "孵化までの日数" "稚魚の育て方" "失敗例" "出典" -}}
+{{- $heads := slice "col_who" "col_when" "col_water" "col_trigger" "col_eggs" "col_hatch_days" "col_fry" "col_failures" "col_refs" -}}
 {{- if $rows }}
-<div class="scroll" tabindex="0" role="region" aria-label="繁殖記録">
-<table class="breeding"><caption>繁殖記録（{{ len $rows }}件）</caption>
-<thead><tr>{{ range $heads }}<th scope="col">{{ . }}</th>{{ end }}</tr></thead>
+<div class="scroll" tabindex="0" role="region" aria-label="{{ T "breeding_records" }}">
+<table class="breeding"><caption>{{ T "breeding_caption" (len $rows) }}</caption>
+<thead><tr>{{ range $heads }}<th scope="col">{{ T . }}</th>{{ end }}</tr></thead>
 <tbody>
 {{- range $row := $rows }}
 {{- $badge := index (dict "確認済み" "ok" "要確認" "warn" "未確認" "none") ($row.status | default "") }}
-<tr>{{ range $keys }}<td>{{ if and (eq . "who") $badge }}<span class="badge {{ $badge }}">{{ $row.status }}</span>{{ end }}{{ with index $row . }}{{ . | markdownify }}{{ else }}記録なし{{ end }}</td>{{ end -}}
+<tr>{{ range $keys }}<td>{{ if and (eq . "who") $badge }}<span class="badge {{ $badge }}">{{ T (print "badge_" $badge) }}</span>{{ end }}{{ with index $row . }}{{ . | markdownify }}{{ else }}{{ T "no_record" }}{{ end }}</td>{{ end -}}
 <td>{{ range split $row.refs "," }}［{{ trim . " " }}］{{ end }}</td></tr>
 {{- end }}
 </tbody></table>
 </div>
 {{- else }}
-<p class="empty">繁殖の記録はまだ見つかっていません。</p>
+<p class="empty">{{ T "breeding_empty" }}</p>
 {{- end }}

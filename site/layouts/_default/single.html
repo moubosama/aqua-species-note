@@ -2,7 +2,7 @@
 {{- /* 付属ページ（用語集など）の共通の形。種ページは layouts/species/single.html。 */ -}}
 <article>
 <h1>{{ .Title }}</h1>
-<p class="updated">更新日 <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2006-01-02" }}</time></p>
+<p class="updated">{{ T "updated" }} <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2006-01-02" }}</time></p>
 {{ .Content }}
 </article>
 {{ end }}

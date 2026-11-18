@@ -278,5 +278,45 @@ class RealFilesTest(unittest.TestCase):
         self.assertEqual([str(f) for f in findings], [])
 
 
+class EnglishSourcesTest(unittest.TestCase):
+    """英語版の原稿（*.en.md）も種ページの原稿として確かめ、_index.en.md は除く。比較ページの lastmod は言語ごと。"""
+
+    def test_english_sources_are_listed_and_index_is_skipped(self):
+        with helpers.temp_dir() as tmp:
+            site = make_temp_site(Path(tmp))
+            species = site / "content" / "species"
+            write(species / "_index.en.md", '+++\ntitle = "Species list"\n+++\n')
+            write(species / "a-fish.md", VALID_SOURCE.format(lastmod="2026-11-16"))
+            write(species / "a-fish.en.md", VALID_SOURCE.format(lastmod="2026-11-16"))
+            write(species / "b-fish" / "index.en.md", VALID_SOURCE.format(lastmod="2026-11-16"))
+            names = [p.relative_to(species).as_posix() for p in frontmatter.species_sources(site)]
+            findings = frontmatter.run(None, helpers.CONFIG, site)
+        self.assertEqual(names, ["a-fish.en.md", "a-fish.md", "b-fish/index.en.md"])
+        self.assertEqual([str(f) for f in findings], [])
+
+    def test_broken_english_source_is_reported(self):
+        with helpers.temp_dir() as tmp:
+            site = make_temp_site(Path(tmp))
+            write(site / "content" / "species" / "a-fish.en.md", BROKEN_SOURCE)
+            findings = frontmatter.run(None, helpers.CONFIG, site)
+        self.assertTrue(findings)
+        self.assertTrue(all(f.where.endswith("a-fish.en.md") for f in findings))
+
+    def test_compare_lastmod_is_checked_per_language(self):
+        with helpers.temp_dir() as tmp:
+            site = make_temp_site(Path(tmp))
+            species = site / "content" / "species"
+            write(species / "a-fish.md", VALID_SOURCE.format(lastmod="2026-11-16"))
+            write(species / "a-fish.en.md", VALID_SOURCE.format(lastmod="2026-11-18"))
+            compare = site / "content" / "compare"
+            write(compare / "index.md", COMPARE_SOURCE.format(lastmod="2026-11-16"))
+            write(compare / "index.en.md", COMPARE_SOURCE.format(lastmod="2026-11-17"))
+            found = [(Path(f.where).name, f.message) for f in frontmatter.run(None, helpers.CONFIG, site)]
+        # 日本語版の比較ページは日本語版の種（11-16）とだけ比べるので通り、英語版は 11-18 より前なので失敗
+        self.assertEqual(len(found), 1, found)
+        self.assertEqual(found[0][0], "index.en.md")
+        self.assertIn("2026-11-18、a-fish.en", found[0][1])
+
+
 if __name__ == "__main__":
     unittest.main()

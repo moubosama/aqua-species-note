@@ -1,6 +1,7 @@
 """種ページの原稿（site/content/species/*.md と */index.md）とひな形のフロントマターを確かめる。
 
 フロントマターは TOML（+++ で囲む）。Python 3.11 の標準ライブラリ tomllib で読む。
+英語版の原稿（*.en.md）も同じ決まりで確かめる（yomi・status・kind は日本語のまま。english-version-spec.md）。
 """
 from __future__ import annotations
 
@@ -175,11 +176,19 @@ def check_file(path: Path, fact_keys: tuple[str, ...], *, template: bool = False
 
 
 def species_sources(site_dir: Path) -> list[Path]:
-    """種ページの原稿。species/ の下の *.md（_index.md を除く）と、フォルダ形式の */index.md（FR3）。"""
+    """種ページの原稿。species/ の下の *.md（_index.md と訳の _index.en.md などを除く）と、
+    フォルダ形式の */index.md・*/index.en.md（FR3）。"""
     folder = site_dir / "content" / "species"
-    files = [p for p in folder.glob("*.md") if p.name != "_index.md"]
+    files = [p for p in folder.glob("*.md") if not p.name.startswith("_index.")]
     files += folder.glob("*/index.md")
+    files += folder.glob("*/index.*.md")
     return sorted(files)
+
+
+def source_lang(path: Path) -> str:
+    """原稿の言語。名前の最後が .en.md なら "en"、ほかは日本語の "ja"。"""
+    parts = path.name.split(".")
+    return parts[-2] if len(parts) >= 3 else "ja"
 
 
 def _read_lastmod(path: Path):
@@ -195,9 +204,18 @@ def check_compare_lastmod(site_dir: Path, sources: list[Path]) -> list[Finding]:
     """比較ページの lastmod が、種のページの lastmod のいちばん新しい日より前なら失敗（D5、FR6.1）。
 
     比較ページは種のページの繁殖記録から作るので、種のページを直したら比較ページの lastmod も進める。
+    言語ごとに確かめる（compare/index.md と日本語版の種、compare/index.en.md と英語版の種）。
     比較ページの原稿がないサイト（テストの一時フォルダなど）では確かめない。
     """
-    path = site_dir / "content" / "compare" / "index.md"
+    findings = []
+    for lang in sorted({"ja"} | {source_lang(p) for p in sources}):
+        name = "index.md" if lang == "ja" else f"index.{lang}.md"
+        path = site_dir / "content" / "compare" / name
+        findings += _check_compare_lastmod(path, [p for p in sources if source_lang(p) == lang])
+    return findings
+
+
+def _check_compare_lastmod(path: Path, sources: list[Path]) -> list[Finding]:
     if not path.is_file():
         return []
     where = path.as_posix()
@@ -210,7 +228,7 @@ def check_compare_lastmod(site_dir: Path, sources: list[Path]) -> list[Finding]:
         return []
     newest, newest_path = max(dated)
     if compare < newest:
-        name = newest_path.parent.name if newest_path.name == "index.md" else newest_path.stem
+        name = newest_path.parent.name if newest_path.name.startswith("index.") else newest_path.stem
         return [Finding(NAME, where,
                         f"比較ページの lastmod（{compare}）が、種のページのいちばん新しい更新日"
                         f"（{newest}、{name}）より前です。比較ページの lastmod を {newest} 以降にしてください（FR6）")]

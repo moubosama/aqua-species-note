@@ -1,6 +1,7 @@
 """直した不具合 D1〜D4・FR3.6 の再発、noindex、有料ガイドの枠のテスト。"""
 import dataclasses
 import unittest
+from pathlib import Path
 
 import helpers
 from checks import regressions
@@ -70,6 +71,101 @@ class RegressionTest(unittest.TestCase):
         found = messages(good_site(**{"species/test-fish/index.html": page}))
         self.assertTrue(any("FR1.9" in m for m in found))
         self.assertTrue(any("FR2.2" in m for m in found))
+
+
+EN_CARDS = '<h1>Species list</h1><ul class="cards"><li>fish</li></ul>'
+
+
+def en_plain(rel, main="<h1>Heading</h1>", **kwargs):
+    kwargs.setdefault("home_href", "/aqua-species-note/en/")
+    return helpers.plain_page(rel, main, lang="en", **kwargs)
+
+
+def good_bilingual_site(**replace):
+    pages = {
+        "en/index.html": en_plain("en/index.html", EN_CARDS.replace("Species list", "Top")),
+        "en/species/index.html": en_plain("en/species/index.html", EN_CARDS,
+                                          title="Species list | Tropical Fish Species Notes"),
+        "en/species/test-fish/index.html": helpers.en_species_page(),
+        "en/404.html": en_plain("en/404.html", '<h1>Page not found</h1><a href="/aqua-species-note/en/">Top</a>'),
+    }
+    pages.update(replace)
+    site = good_site()
+    site.pages += [p for p in pages.values() if p is not None]
+    site.files |= {p.rel for p in pages.values() if p is not None}
+    return site
+
+
+class EnglishRegressionTest(unittest.TestCase):
+    def test_bilingual_site_has_no_regressions(self):
+        self.assertEqual(messages(good_bilingual_site()), [])
+
+    def test_d1_english_header_link_must_go_to_english_top(self):
+        broken = en_plain("en/glossary/index.html", home_href="/aqua-species-note/")
+        found = messages(good_bilingual_site(**{"en/glossary/index.html": broken}))
+        self.assertIn("ヘッダーのリンク先が '/aqua-species-note/' です（/aqua-species-note/en/ にする。D1）", found)
+
+    def test_d2_english_species_list_heading_and_title(self):
+        hugo_default = en_plain("en/species/index.html", EN_CARDS.replace("Species list", "Species"),
+                                title="Species | Tropical Fish Species Notes")
+        found = messages(good_bilingual_site(**{"en/species/index.html": hugo_default}))
+        self.assertIn("種の一覧の見出しが「Species list」になっていません（D2）", found)
+        self.assertIn("英語版の種の一覧のタイトルが「Species list」で始まっていません（D2）", found)
+        found = messages(good_bilingual_site(**{"en/species/index.html": None}))
+        self.assertIn("en/species/index.html がありません（D2）", found)
+
+    def test_d4_english_not_found_page_links_to_english_top(self):
+        wrong = en_plain("en/404.html", '<h1>Page not found</h1><a href="/aqua-species-note/">Top</a>')
+        found = messages(good_bilingual_site(**{"en/404.html": wrong}))
+        self.assertTrue(any("en/404.html にトップ（/aqua-species-note/en/）へのリンク" in m for m in found), found)
+
+    def test_cards_on_english_pages(self):
+        no_cards = en_plain("en/index.html", "<h1>Top</h1>")
+        self.assertTrue(any("FR3.6" in m for m in messages(good_bilingual_site(**{"en/index.html": no_cards}))))
+
+    def test_d3_english_taxonomy_pages(self):
+        site = good_bilingual_site()
+        site.files.add("en/tags/index.html")
+        self.assertIn("en/tags/ のページが書き出されています（D3）", messages(site))
+
+
+class SitemapIndexTest(unittest.TestCase):
+    """多言語のサイトの sitemap.xml は、言語ごとのサイトマップの一覧。その先も読んで D3 を確かめる。"""
+
+    INDEX = ("<sitemapindex><sitemap><loc>https://moubosama.github.io/aqua-species-note/ja/sitemap.xml</loc>"
+             "</sitemap><sitemap><loc>https://moubosama.github.io/aqua-species-note/en/sitemap.xml</loc>"
+             "</sitemap></sitemapindex>")
+
+    def write_docs(self, root, files):
+        for rel, text in files.items():
+            path = root / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+
+    def test_child_sitemaps_are_read(self):
+        en_map = GOOD_SITEMAP.replace("</urlset>", "<url><loc>https://x/aqua-species-note/en/tags/</loc></url></urlset>")
+        with helpers.temp_dir() as tmp:
+            root = Path(tmp)
+            self.write_docs(root, {"sitemap.xml": self.INDEX, "ja/sitemap.xml": GOOD_SITEMAP,
+                                   "en/sitemap.xml": en_map})
+            text, problems = regressions.read_sitemaps(root, helpers.CONFIG)
+        self.assertEqual(problems, [])
+        self.assertIn("サイトマップに tags/ が載っています（D3、FR5.3）", messages(good_site(), sitemap=text))
+
+    def test_missing_child_sitemap_is_reported(self):
+        with helpers.temp_dir() as tmp:
+            root = Path(tmp)
+            self.write_docs(root, {"sitemap.xml": self.INDEX, "ja/sitemap.xml": GOOD_SITEMAP})
+            text, problems = regressions.read_sitemaps(root, helpers.CONFIG)
+        self.assertEqual(len(problems), 1)
+        self.assertIn("en/sitemap.xml がありません", problems[0])
+
+    def test_plain_sitemap_and_no_sitemap(self):
+        with helpers.temp_dir() as tmp:
+            root = Path(tmp)
+            self.assertEqual(regressions.read_sitemaps(root, helpers.CONFIG), (None, []))
+            self.write_docs(root, {"sitemap.xml": GOOD_SITEMAP})
+            self.assertEqual(regressions.read_sitemaps(root, helpers.CONFIG), (GOOD_SITEMAP, []))
 
 
 if __name__ == "__main__":

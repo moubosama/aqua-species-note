@@ -1,11 +1,12 @@
-{{- /* 種のカード一覧。トップと種の一覧にだけ出す（FR3.6）。和名の読み（yomi）の五十音順。 */ -}}
+{{- /* 種のカード一覧。トップと種の一覧にだけ出す（FR3.6）。和名の読み（yomi）の五十音順。
+  site.RegularPages はいま書き出している言語のページだけなので、日本語版・英語版それぞれの種が並ぶ。 */ -}}
 {{- $species := (where site.RegularPages "Section" "species").ByParam "yomi" -}}
 {{- with $species }}
 <ul class="cards">
 {{- range . }}
-<li><a href="{{ .RelPermalink }}"><strong>{{ .Title }}</strong><span class="sci">{{ partial "sci.html" . }}</span><small>{{ .Description }}</small><small class="updated">更新日 {{ .Lastmod.Format "2006-01-02" }}</small></a></li>
+<li><a href="{{ .RelPermalink }}"><strong>{{ .Title }}</strong><span class="sci">{{ partial "sci.html" . }}</span><small>{{ .Description }}</small><small class="updated">{{ T "updated" }} {{ .Lastmod.Format "2006-01-02" }}</small></a></li>
 {{- end }}
 </ul>
 {{- else }}
-<p class="empty">まだ種のページはありません。</p>
+<p class="empty">{{ T "no_species" }}</p>
 {{- end }}

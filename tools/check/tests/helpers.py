@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 TESTS_DIR = Path(__file__).resolve().parent
 
 from checks.site import (  # noqa: E402
-    BREEDING_COLUMNS, CHAPTERS, LEGAL_HEADING, LEGAL_SUBHEADINGS, Config, Page, Site,
+    BREEDING_COLUMNS, CHAPTERS, LANGS, LEGAL_HEADING, LEGAL_SUBHEADINGS, Config, Page, Site,
 )
 
 BASE = "/aqua-species-note/"
@@ -22,16 +22,18 @@ FACT_KEYS = ("trade_names", "taxonomy", "origin", "size",
              "temperature", "water", "breeding", "price")
 FACT_LABELS = ("流通名", "分類（学名の状態）", "産地", "大きさ",
                "水温", "水質（pH など）", "繁殖", "相場（時期つき）")
+FACT_LABELS_EN = ("Trade names", "Taxonomy (status of the scientific name)", "Origin", "Size",
+                  "Temperature", "Water (pH etc.)", "Breeding", "Price (with dates)")
 CONFIG = Config(base_path=BASE, site_url=SITE_URL, noindex=True,
-                fact_keys=FACT_KEYS, fact_labels=FACT_LABELS)
+                fact_keys=FACT_KEYS, fact_labels=FACT_LABELS, fact_labels_en=FACT_LABELS_EN)
 CHAPTER_IDS = ["intro", "identity", "habitat", "breeding", "care",
                "before-buying", "unknowns", "references"]
 
 
 def page_html(main: str, *, title: str = "ページ", url: str = SITE_URL,
               lang: str = "ja", head_extra: str = "", noindex: bool = True,
-              home_href: str = BASE, jsonld: str = "") -> str:
-    """どのページにも共通の head・ヘッダー・フッターを付けた HTML。"""
+              home_href: str = BASE, jsonld: str = "", nav: str = "") -> str:
+    """どのページにも共通の head・ヘッダー・フッターを付けた HTML。nav はヘッダーのメニューの中身。"""
     robots = '<meta name="robots" content="noindex,nofollow">' if noindex else ""
     return (
         f'<!doctype html><html lang="{lang}"><head><meta charset="utf-8">'
@@ -43,25 +45,28 @@ def page_html(main: str, *, title: str = "ページ", url: str = SITE_URL,
         f'<meta property="og:url" content="{url}">'
         f"{jsonld}{head_extra}"
         f'<link rel="stylesheet" href="{BASE}css/style.css"></head><body>'
-        f'<header class="site"><a href="{home_href}">熱帯魚 種類別ノート</a></header>'
+        f'<header class="site"><a href="{home_href}">熱帯魚 種類別ノート</a>'
+        f'<nav><ul class="links">{nav}</ul></nav></header>'
         f"<main>{main}</main>"
         '<footer class="site"><a href="/aqua-species-note/updates/">更新履歴</a></footer>'
         "</body></html>"
     )
 
 
-def facts_table(values: dict[str, str] | None = None) -> str:
+def facts_table(values: dict[str, str] | None = None, *, lang: str = "ja") -> str:
     values = values or {}
+    labels = FACT_LABELS_EN if lang == "en" else FACT_LABELS
+    empty = "No record" if lang == "en" else "記録なし"
     rows = "".join(
-        f'<tr><th scope="row">{label}</th><td>{values.get(key, "記録なし")}</td></tr>'
-        for key, label in zip(FACT_KEYS, FACT_LABELS)
+        f'<tr><th scope="row">{label}</th><td>{values.get(key, empty)}</td></tr>'
+        for key, label in zip(FACT_KEYS, labels)
     )
     return ('<div class="scroll" tabindex="0" role="region" aria-label="要点">'
             f'<table class="facts"><caption>要点</caption><tbody>{rows}</tbody></table></div>')
 
 
-def breeding_table(rows: list[list[str]]) -> str:
-    head = "".join(f'<th scope="col">{c}</th>' for c in BREEDING_COLUMNS)
+def breeding_table(rows: list[list[str]], *, lang: str = "ja") -> str:
+    head = "".join(f'<th scope="col">{c}</th>' for c in LANGS[lang].breeding_columns)
     body = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in rows)
     return ('<div class="scroll" tabindex="0" role="region" aria-label="繁殖記録">'
             f'<table class="breeding"><caption>繁殖記録</caption><thead><tr>{head}</tr></thead>'
@@ -75,24 +80,27 @@ def cite(n: int, href_base: str = "") -> str:
 def species_main(*, chapters: list[str] | None = None, facts: str | None = None,
                  breeding: str | None = None, legal: str | None = None,
                  refs: int = 3, body_extra: str = "", sci: str | None = None,
-                 dates: str | None = None, toc: str | None = None) -> str:
-    """正しい種ページの main の中身。引数で一部だけを差し替えられる。"""
-    chapters = CHAPTERS if chapters is None else chapters
+                 dates: str | None = None, toc: str | None = None, lang: str = "ja") -> str:
+    """正しい種ページの main の中身。引数で一部だけを差し替えられる。lang="en" で英語版の言葉にする。"""
+    rules = LANGS[lang]
+    chapters = list(rules.chapters) if chapters is None else chapters
     if facts is None:
-        facts = facts_table({"size": f"約4cm{cite(1)}"})
+        facts = facts_table({"size": f"約4cm{cite(1)}"}, lang=lang)
     if breeding is None:
-        breeding = breeding_table([["香港の繁殖者", "2020年10月", "記録なし", "換水", "23個",
-                                    "5日", "記録なし", "記録なし", cite(2)]])
+        none = "No record" if lang == "en" else "記録なし"
+        breeding = breeding_table([["香港の繁殖者", "2020年10月", none, "換水", "23個",
+                                    "5日", none, none, cite(2)]], lang=lang)
     if legal is None:
-        legal = f"<h3>{LEGAL_HEADING}</h3>" + "".join(
-            f"<h4>{h}</h4><p>本文</p>" for h in LEGAL_SUBHEADINGS)
+        legal = f"<h3>{rules.legal_heading}</h3>" + "".join(
+            f"<h4>{h}</h4><p>本文</p>" for h in rules.legal_subheadings)
     if sci is None:
         sci = '<p class="sci"><i>Hoplisoma</i> sp. (CW111)</p>'
     if dates is None:
-        dates = ('<p class="updated">公開日 <time datetime="2026-11-16">2026-11-16</time>'
-                 ' / 更新日 <time datetime="2026-11-16">2026-11-16</time></p>')
+        published, updated = ("Published", "Updated") if lang == "en" else ("公開日", "更新日")
+        dates = (f'<p class="updated">{published} <time datetime="2026-11-16">2026-11-16</time>'
+                 f' / {updated} <time datetime="2026-11-16">2026-11-16</time></p>')
     if toc is None:
-        toc = ('<nav class="toc" aria-label="目次"><ul>'
+        toc = (f'<nav class="toc" aria-label="{rules.toc_label}"><ul>'
                + "".join(f'<li><a href="#{i}">{c}</a></li>' for i, c in zip(CHAPTER_IDS, chapters))
                + "</ul></nav>")
     sections = []
@@ -102,7 +110,7 @@ def species_main(*, chapters: list[str] | None = None, facts: str | None = None,
             sections.append(breeding)
         if chapter.startswith("6."):
             sections.append(legal)
-        if chapter == "参考文献":
+        if chapter == rules.chapters[-1]:
             sections.append("<ol>" + "".join(f'<li id="ref-{n}">文献{n}</li>'
                                              for n in range(1, refs + 1)) + "</ol>")
         else:
@@ -113,8 +121,14 @@ def species_main(*, chapters: list[str] | None = None, facts: str | None = None,
 
 def species_page(rel: str = "species/test-fish/index.html", **kwargs) -> Page:
     url = SITE_URL + rel.replace("index.html", "")
+    lang = kwargs.get("lang", "ja")
     return Page(rel, page_html(species_main(**kwargs), title="コリドラス・ゼブリーナ", url=url,
-                               jsonld=JSONLD))
+                               jsonld=JSONLD, lang=lang, home_href=BASE + LANGS[lang].prefix))
+
+
+def en_species_page(rel: str = "en/species/test-fish/index.html", **kwargs) -> Page:
+    """英語版の正しい種ページ。"""
+    return species_page(rel, lang="en", **kwargs)
 
 
 def plain_page(rel: str, main: str = "<h1>見出し</h1><p>本文</p>", **kwargs) -> Page:

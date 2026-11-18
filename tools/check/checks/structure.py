@@ -1,18 +1,24 @@
-"""ページの構造の確認（accessibility-checklist.md の M1〜M3・M6〜M10 と、種ページの型）。"""
+"""ページの構造の確認（accessibility-checklist.md の M1〜M3・M6〜M10 と、種ページの型）。
+
+英語版（docs/en/ の下）のページは、英語の決まった言葉（site.py の EN）で確かめる。
+"""
 from __future__ import annotations
 
 import re
 
 from .htmlpage import Element
 from .report import Finding
-from .site import (
-    BREEDING_COLUMNS, BREEDING_EMPTY_TEXT, CHAPTERS, LEGAL_HEADING, LEGAL_SUBHEADINGS,
-    Config, Page,
-)
+from .site import JA, Config, LangRules, Page
 
 NAME = "structure"
 HEADING = re.compile(r"^h([1-6])$")
-DATE_LINE = re.compile(r"公開日\s*\d{4}-\d{2}-\d{2}\s*/\s*更新日\s*\d{4}-\d{2}-\d{2}")
+# 日本語版の日付の行（英語版は site.py の EN.date_line）
+DATE_LINE = JA.date_line
+
+
+def plain_quotes(text: str) -> str:
+    """Hugo（goldmark）が曲げた引用符（’ “ ”）を、原稿の ' " に戻す。英語の見出し（This page's …）を比べるため。"""
+    return text.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
 
 
 def headings(root: Element) -> list[tuple[int, str, Element]]:
@@ -29,8 +35,8 @@ def check_common(page: Page) -> list[str]:
     """どのページにも当てはまる確認。問題の説明の一覧を返す。"""
     problems = []
     html = page.root.find("html")
-    if html is None or html.get("lang") != "ja":
-        problems.append('<html lang="ja"> がありません（M1）')
+    if html is None or html.get("lang") != page.lang:
+        problems.append(f'<html lang="{page.lang}"> がありません（M1）')
     if page.root.find("meta", attrs={"name": "viewport"}) is None:
         problems.append('<meta name="viewport"> がありません（M10）')
     levels = headings(page.root)
@@ -114,24 +120,26 @@ def check_species(page: Page, config: Config) -> list[str]:
     if main is None:
         return ["<main> がありません"]
     levels = headings(main)
-    problems = _check_chapters(levels)
-    problems += _check_legal(levels)
-    problems += _check_toc(main, levels)
-    problems += _check_facts(main, config)
-    problems += _check_breeding(main)
-    problems += _check_header(main)
+    rules = page.rules
+    problems = _check_chapters(levels, rules)
+    problems += _check_legal(levels, rules)
+    problems += _check_toc(main, levels, rules)
+    problems += _check_facts(main, config.labels_for(page.lang))
+    problems += _check_breeding(main, rules)
+    problems += _check_header(main, rules)
     return problems
 
 
-def _check_chapters(levels) -> list[str]:
-    h2 = [text for level, text, _ in levels if level == 2]
-    if len(h2) != len(CHAPTERS):
-        return [f"章の数が {len(h2)} です（{len(CHAPTERS)} 章: {' / '.join(CHAPTERS)}）"]
+def _check_chapters(levels, rules: LangRules = JA) -> list[str]:
+    chapters = rules.chapters
+    h2 = [plain_quotes(text) for level, text, _ in levels if level == 2]
+    if len(h2) != len(chapters):
+        return [f"章の数が {len(h2)} です（{len(chapters)} 章: {' / '.join(chapters)}）"]
     return [f"{i + 1} 番目の章が「{text}」です（「{want}」で始める）"
-            for i, (text, want) in enumerate(zip(h2, CHAPTERS)) if not text.startswith(want)]
+            for i, (text, want) in enumerate(zip(h2, chapters)) if not text.startswith(want)]
 
 
-def _check_legal(levels) -> list[str]:
+def _check_legal(levels, rules: LangRules = JA) -> list[str]:
     starts = [i for i, (lvl, text, _) in enumerate(levels) if lvl == 2 and text.startswith("6.")]
     if not starts:
         return []  # 章の確認で失敗になる
@@ -139,50 +147,51 @@ def _check_legal(levels) -> list[str]:
     for level, text, _ in levels[starts[0] + 1:]:
         if level <= 2:
             break
-        section.append((level, text))
-    legal = [i for i, (lvl, text) in enumerate(section) if lvl == 3 and text == LEGAL_HEADING]
+        section.append((level, plain_quotes(text)))
+    heading, wanted = rules.legal_heading, list(rules.legal_subheadings)
+    legal = [i for i, (lvl, text) in enumerate(section) if lvl == 3 and text == heading]
     if not legal:
-        return [f"「6. 買う前に知っておくこと」に小見出し「{LEGAL_HEADING}」がありません（R-05）"]
+        return [f"「{rules.chapters[5]}」に小見出し「{heading}」がありません（R-05）"]
     subs = []
     for level, text in section[legal[0] + 1:]:
         if level <= 3:
             break
         if level == 4:
             subs.append(text)
-    if subs[:len(LEGAL_SUBHEADINGS)] != LEGAL_SUBHEADINGS:
-        return [f"「{LEGAL_HEADING}」の下に {' / '.join(LEGAL_SUBHEADINGS)} をこの順に置いてください"
+    if subs[:len(wanted)] != wanted:
+        return [f"「{heading}」の下に {' / '.join(wanted)} をこの順に置いてください"
                 f"（今は {' / '.join(subs) or 'なし'}。R-05）"]
     return []
 
 
-def _check_toc(main: Element, levels) -> list[str]:
-    nav = main.find("nav", attrs={"aria-label": "目次"})
+def _check_toc(main: Element, levels, rules: LangRules = JA) -> list[str]:
+    nav = main.find("nav", attrs={"aria-label": rules.toc_label})
     if nav is None:
-        return ['目次 <nav aria-label="目次"> がありません（M8）']
+        return [f'目次 <nav aria-label="{rules.toc_label}"> がありません（M8）']
     targets = {a.get("href") for a in nav.find_all("a")}
     missing = [text for level, text, el in levels
                if level == 2 and f"#{el.get('id')}" not in targets]
     return [f"目次に章「{text}」へのリンクがありません" for text in missing]
 
 
-def _check_facts(main: Element, config: Config) -> list[str]:
+def _check_facts(main: Element, fact_labels: tuple[str, ...]) -> list[str]:
     table = main.find("table", cls="facts")
     if table is None:
         return ["要点の表（table.facts）がありません（FR1.2）"]
     labels = tuple(" ".join(th.text().split()) for th in table.find_all("th"))
-    if labels != config.fact_labels:
+    if labels != fact_labels:
         return [f"要点の表の項目が型と違います: {' / '.join(labels)}（FR1.2）"]
     empty = [label for label, td in zip(labels, table.find_all("td")) if not td.text().strip()]
     return [f"要点の表の「{label}」が空欄です（「記録なし」か「未確認」と書く）" for label in empty]
 
 
-def _check_breeding(main: Element) -> list[str]:
+def _check_breeding(main: Element, rules: LangRules = JA) -> list[str]:
     table = main.find("table", cls="breeding")
     if table is None:
-        empty = [p for p in main.find_all("p") if p.text().strip() == BREEDING_EMPTY_TEXT]
+        empty = [p for p in main.find_all("p") if p.text().strip() == rules.breeding_empty_text]
         return [] if empty else ["繁殖記録の表も、記録0件の文言もありません（FR1.3）"]
     heads = [" ".join(th.text().split()) for th in table.find_all("th")]
-    if heads != BREEDING_COLUMNS:
+    if heads != list(rules.breeding_columns):
         return [f"繁殖記録の表の列が型と違います: {' / '.join(heads)}（FR1.3）"]
     body = table.find("tbody") or table
     return [f"繁殖記録の表の {i} 行目に空欄があります（「記録なし」と書く）"
@@ -190,11 +199,14 @@ def _check_breeding(main: Element) -> list[str]:
             if tr.find("td") is not None and any(not td.text().strip() for td in tr.find_all("td"))]
 
 
-def _check_header(main: Element) -> list[str]:
+def _check_header(main: Element, rules: LangRules = JA) -> list[str]:
     problems = []
     dates = main.find("p", cls="updated")
-    if dates is None or not DATE_LINE.search(" ".join(dates.text().split())):
-        problems.append("公開日と更新日（YYYY-MM-DD）がありません（FR1.5）")
+    if dates is None or not rules.date_line.search(" ".join(dates.text().split())):
+        if rules.code == "ja":
+            problems.append("公開日と更新日（YYYY-MM-DD）がありません（FR1.5）")
+        else:
+            problems.append("公開日と更新日の行（Published YYYY-MM-DD / Updated YYYY-MM-DD）がありません（FR1.5）")
     sci = main.find("p", cls="sci")
     if sci is None or sci.find("i") is None:
         problems.append("学名の行に、斜体にした属名（<i>）がありません（FR1.6）")

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tropical Fish Species Notes</title>
+    <link>https://moubosama.github.io/aqua-species-note/en/</link>
+    <description>Recent content on Tropical Fish Species Notes</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 17 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://moubosama.github.io/aqua-species-note/en/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Comparison across species</title>
+      <link>https://moubosama.github.io/aqua-species-note/en/compare/</link>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 +0000</pubDate>
+      <guid>https://moubosama.github.io/aqua-species-note/en/compare/</guid>
+      <description>&lt;p&gt;This page lines up only a summary from the &amp;ldquo;Breeding records compared&amp;rdquo; section of each species page. Please check the detailed records and sources on each species page.&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Number ranges are built only from that species&amp;rsquo; own records where the numbers are known. Numbers marked (needs checking) or (unverified) are not included in the ranges.&lt;/li&gt;&#xA;&lt;li&gt;Records from related species and values derived from the author&amp;rsquo;s inference are not included in the ranges; only their count is shown.&lt;/li&gt;&#xA;&lt;li&gt;A ［number］ is the reference number in the reference list of that species&amp;rsquo; page.&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>Corydoras &#34;Zebrina&#34; (CW111)</title>
+      <link>https://moubosama.github.io/aqua-species-note/en/species/corydoras-cw111-zebrina/</link>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 +0000</pubDate>
+      <guid>https://moubosama.github.io/aqua-species-note/en/species/corydoras-cw111-zebrina/</guid>
+      <description>&lt;h2 id=&#34;intro&#34;&gt;1. Introduction — how this page was made&lt;/h2&gt;&#xA;&lt;p&gt;Corydoras &amp;ldquo;Zebrina&amp;rdquo; is a fish that sells for tens of thousands of yen a pair, and wild fish can go for more than 100,000 yen. Yet little information is available in Japanese, and some shop descriptions come with a caveat that its breeding method &amp;ldquo;is presumed to be similar to other common Corydoras&amp;rdquo; (translated) (product page of a Japanese shop［28］; checked November 16, 2026).&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Glossary</title>
+      <link>https://moubosama.github.io/aqua-species-note/en/glossary/</link>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 +0000</pubDate>
+      <guid>https://moubosama.github.io/aqua-species-note/en/glossary/</guid>
+      <description>&lt;p&gt;Terms that appear on the species pages, listed in Japanese syllabary (gojūon) order of their Japanese readings.&lt;/p&gt;&#xA;&lt;h2 id=&#34;f1-f2&#34;&gt;F1, F2&lt;/h2&gt;&#xA;&lt;p&gt;Names for generations born in captivity. The offspring of two wild-caught parents (wild fish) are F1; the offspring of two F1 fish are F2.&lt;/p&gt;&#xA;&lt;h2 id=&#34;related-species-data&#34;&gt;Data from a related species&lt;/h2&gt;&#xA;&lt;p&gt;Numbers or observations recorded not for the species itself but for a closely related fish. On this site, the text says &amp;ldquo;data from a related species&amp;rdquo; to keep these separate from records of the species itself.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

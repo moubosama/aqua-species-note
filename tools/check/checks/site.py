@@ -30,7 +30,79 @@ BREEDING_COLUMNS = [
     "孵化までの日数", "稚魚の育て方", "失敗例", "出典",
 ]
 BREEDING_EMPTY_TEXT = "繁殖の記録はまだ見つかっていません。"
-SPECIES_PAGE = re.compile(r"^species/[^/]+/index\.html$")
+# 種ページ。英語版は en/ の下（english-version-spec.md）
+SPECIES_PAGE = re.compile(r"^(?:en/)?species/[^/]+/index\.html$")
+
+
+@dataclass(frozen=True)
+class LangRules:
+    """言語ごとの決まった言葉。画面の言葉は site/i18n/*.toml、英語は english-version-spec.md と同じにする。"""
+
+    code: str                 # <html lang> と hreflang の値
+    prefix: str               # docs/ の中の場所（日本語版は根なので ""、英語版は "en/"）
+    chapters: tuple[str, ...]
+    legal_heading: str
+    legal_subheadings: tuple[str, ...]
+    breeding_columns: tuple[str, ...]
+    breeding_empty_text: str
+    date_line: re.Pattern
+    toc_label: str
+    species_list_title: str
+    switch_text: str          # この言語へ移る切り替えのリンクの文字（hugo.toml の label）
+
+
+JA = LangRules(
+    code="ja",
+    prefix="",
+    chapters=tuple(CHAPTERS),
+    legal_heading=LEGAL_HEADING,
+    legal_subheadings=tuple(LEGAL_SUBHEADINGS),
+    breeding_columns=tuple(BREEDING_COLUMNS),
+    breeding_empty_text=BREEDING_EMPTY_TEXT,
+    date_line=re.compile(r"公開日\s*\d{4}-\d{2}-\d{2}\s*/\s*更新日\s*\d{4}-\d{2}-\d{2}"),
+    toc_label="目次",
+    species_list_title="種の一覧",
+    switch_text="日本語",
+)
+EN = LangRules(
+    code="en",
+    prefix="en/",
+    chapters=(
+        "1. Introduction",
+        "2. Identity",
+        "3. Habitat",
+        "4. Breeding records compared",
+        "5. Keeping and breeding",
+        "6. Before you buy",
+        "7. What is still unknown",
+        "References",
+    ),
+    legal_heading="Legality and regulation",
+    legal_subheadings=("What is known", "What is not known",
+                       "Japanese regulations: date checked", "This page's position"),
+    breeding_columns=("Who", "When", "Water", "Trigger", "Eggs",
+                      "Days to hatch", "Raising fry", "Failures", "Sources"),
+    breeding_empty_text="No breeding records have been found yet.",
+    date_line=re.compile(r"Published\s*\d{4}-\d{2}-\d{2}\s*/\s*Updated\s*\d{4}-\d{2}-\d{2}"),
+    toc_label="Contents",
+    species_list_title="Species list",
+    switch_text="English",
+)
+LANGS = {"ja": JA, "en": EN}
+# 切り替え先の言語（2言語なので互いに相手を指す）
+OTHER_LANG = {"ja": "en", "en": "ja"}
+
+
+def page_lang(rel: str) -> str:
+    """docs/ の中の場所から、ページの言語を決める。en/ の下は英語版、ほかは日本語版。"""
+    return "en" if rel.startswith(EN.prefix) else "ja"
+
+
+def counterpart(rel: str) -> str:
+    """同じ場所の、もう一方の言語のファイル（例: species/x/index.html ⇔ en/species/x/index.html）。"""
+    lang = page_lang(rel)
+    bare = rel[len(LANGS[lang].prefix):]
+    return LANGS[OTHER_LANG[lang]].prefix + bare
 
 
 class ConfigError(Exception):
@@ -45,7 +117,16 @@ class Config:
     site_url: str = "https://moubosama.github.io/aqua-species-note/"
     noindex: bool = True
     fact_keys: tuple[str, ...] = ()
-    fact_labels: tuple[str, ...] = ()
+    fact_labels: tuple[str, ...] = ()       # 日本語版（facts.toml の label）
+    fact_labels_en: tuple[str, ...] = ()    # 英語版（facts.toml の label_en）
+
+    def labels_for(self, lang: str) -> tuple[str, ...]:
+        """要点の表の項目名。英語版は label_en、日本語版は label。"""
+        return self.fact_labels_en if lang == "en" else self.fact_labels
+
+    def home_path(self, lang: str) -> str:
+        """その言語のトップの URL のパス（日本語版 /aqua-species-note/、英語版 /aqua-species-note/en/）。"""
+        return self.base_path + LANGS[lang].prefix
 
     @staticmethod
     def load(site_dir: Path) -> "Config":
@@ -60,6 +141,8 @@ class Config:
         items = facts.get("items", [])
         if not items or any("key" not in i or "label" not in i for i in items):
             raise ConfigError("site/data/facts.toml の items に key と label が必要です")
+        if any("label_en" not in i for i in items):
+            raise ConfigError("site/data/facts.toml の items に英語版の表示名 label_en が必要です")
         noindex = bool(hugo.get("params", {}).get("test", {}).get("noindex", False))
         return Config(
             base_path=base_path,
@@ -67,6 +150,7 @@ class Config:
             noindex=noindex,
             fact_keys=tuple(i["key"] for i in items),
             fact_labels=tuple(i["label"] for i in items),
+            fact_labels_en=tuple(i["label_en"] for i in items),
         )
 
 
@@ -94,6 +178,14 @@ class Page:
     @property
     def is_species(self) -> bool:
         return bool(SPECIES_PAGE.match(self.rel))
+
+    @property
+    def lang(self) -> str:
+        return page_lang(self.rel)
+
+    @property
+    def rules(self) -> LangRules:
+        return LANGS[self.lang]
 
     def ids(self) -> set[str]:
         return {el.get("id") for el in self.root.iter() if el.get("id")}

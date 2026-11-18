@@ -1,0 +1,143 @@
+# 画面に出る決まった言葉（日本語版）。英語版は en.toml。キーは両方で同じにする。
+# 確認のプログラム（tools/check/checks/site.py の LANGS）も同じ言葉を使うので、変えたらそちらも直す。
+
+# 共通（ヘッダー・フッター・日付）
+[site_nav]
+other = "サイト内"
+[footer_note]
+other = "情報は各ページの更新日時点のものです。飼育は自己責任でお願いします。店舗のページは価格や記録の出典として載せたもので、推奨ではありません。"
+[og_locale]
+other = "ja_JP"
+[published]
+other = "公開日"
+[updated]
+other = "更新日"
+[table]
+other = "表"
+[cite]
+other = "出典"
+
+# 種ページ
+[toc]
+other = "目次"
+[facts]
+other = "要点"
+[no_record]
+other = "記録なし"
+[breeding_records]
+other = "繁殖記録"
+[breeding_caption]
+other = "繁殖記録（{{ .Count }}件）"
+[breeding_empty]
+other = "繁殖の記録はまだ見つかっていません。"
+[col_who]
+other = "誰が"
+[col_when]
+other = "いつ"
+[col_water]
+other = "どんな水で"
+[col_trigger]
+other = "きっかけ"
+[col_eggs]
+other = "卵の数"
+[col_hatch_days]
+other = "孵化までの日数"
+[col_fry]
+other = "稚魚の育て方"
+[col_failures]
+other = "失敗例"
+[col_refs]
+other = "出典"
+# 確認の状態の印（原稿の status の値は日本語のまま。画面ではこの言葉を出す）
+[badge_ok]
+other = "確認済み"
+[badge_warn]
+other = "要確認"
+[badge_none]
+other = "未確認"
+
+# トップページ
+[eyebrow]
+other = "RARE TROPICAL FISH ・ FIELD NOTES"
+[read_latest]
+other = "最新のノートを読む"
+[compare_species]
+other = "種をまたいで比べる"
+[howto_title]
+other = "数字の読み方"
+[howto_ref_mark]
+other = "［番号］"
+[howto_ref]
+other = "出典の番号。押すと巻末の参考文献へ移ります。"
+[howto_ok]
+other = "原文で裏が取れた記録。"
+[howto_warn]
+other = "字幕や伝聞から拾った数字。聞き違いの可能性があります。"
+[howto_none]
+other = "元の資料を開けず、裏が取れていないもの。"
+[notes_title]
+other = "種のノート"
+[no_species]
+other = "まだ種のページはありません。"
+[steps_title]
+other = "このノートの作り方"
+[step1_title]
+other = "世界中の記録を集める"
+[step1_text]
+other = "分類学の論文、海外フォーラムの繁殖日記、国内のブログや店の入荷記録まで集めます。"
+[step2_title]
+other = "原文で突き合わせる"
+[step2_text]
+other = "数字は原文で確かめ、確かめた度合いを「確認済み・要確認・未確認」で示します。"
+[step3_title]
+other = "自分の言葉でまとめる"
+[step3_text]
+other = "文章も写真も転載しません。分からないことは、分からないと書きます。"
+
+# 比較ページ
+[compare_caption]
+other = "種ごとの繁殖記録の要約"
+[compare_col_species]
+other = "種"
+[compare_col_count]
+other = "繁殖記録の件数"
+[compare_col_hatch]
+other = "孵化までの日数の幅"
+[compare_col_eggs]
+other = "卵の数の幅（1回）"
+[compare_col_temp]
+other = "水温の幅"
+[compare_count]
+other = "{{ .Count }}件"
+[compare_excluded]
+other = "（近縁種・推論の記録 {{ .Count }}件は幅に含めない）"
+[compare_one]
+other = "いまは1種だけです。種が増えると並びます。"
+[range_one]
+other = "{{ .lo }}{{ .unit }}"
+[range_many]
+other = "{{ .lo }}〜{{ .hi }}{{ .unit }}"
+[unit_days]
+other = "日"
+[unit_eggs]
+other = "個"
+[unit_temp]
+other = "℃"
+
+# 更新履歴
+[updates_label]
+other = "更新履歴"
+[updates_caption]
+other = "更新履歴（更新日の新しい順）"
+[updates_col_page]
+other = "ページ"
+
+# 見つからないページ（404）
+[notfound_title]
+other = "ページが見つかりません"
+[notfound_text]
+other = "URL が変わったか、ページがなくなった可能性があります。"
+[back_home]
+other = "トップへ戻る"
+[species_list]
+other = "種の一覧"

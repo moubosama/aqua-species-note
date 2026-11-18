@@ -1,11 +1,12 @@
 """確認の土台（HTML の読み取り、リンクの解決、結果のまとめ）のテスト。"""
 import io
 import unittest
+from pathlib import Path
 
 import helpers
 from checks.htmlpage import parse_html
 from checks.report import Finding, Report
-from checks.site import resolve_href
+from checks.site import Config, ConfigError, resolve_href
 
 
 class ParseHtmlTest(unittest.TestCase):
@@ -56,6 +57,37 @@ class ReportTest(unittest.TestCase):
         report.print(out)
         self.assertIn("[b] x.html: 壊れている", out.getvalue())
         self.assertIn("失敗 1 件", out.getvalue())
+
+
+class ConfigLoadTest(unittest.TestCase):
+    """site/data/facts.toml の label（日本語版）と label_en（英語版）を読む。"""
+
+    HUGO = 'baseURL = "https://moubosama.github.io/aqua-species-note/"\n[params.test]\nnoindex = true\n'
+
+    def load_with(self, facts):
+        with helpers.temp_dir() as tmp:
+            site = Path(tmp)
+            (site / "data").mkdir()
+            (site / "hugo.toml").write_text(self.HUGO, encoding="utf-8")
+            (site / "data" / "facts.toml").write_text(facts, encoding="utf-8")
+            return Config.load(site)
+
+    def test_labels_for_each_language_and_home_paths(self):
+        config = self.load_with('[[items]]\nkey = "size"\nlabel = "大きさ"\nlabel_en = "Size"\n')
+        self.assertEqual(config.labels_for("ja"), ("大きさ",))
+        self.assertEqual(config.labels_for("en"), ("Size",))
+        self.assertEqual(config.home_path("ja"), "/aqua-species-note/")
+        self.assertEqual(config.home_path("en"), "/aqua-species-note/en/")
+
+    def test_missing_english_label_is_a_config_error(self):
+        with self.assertRaises(ConfigError) as ctx:
+            self.load_with('[[items]]\nkey = "size"\nlabel = "大きさ"\n')
+        self.assertIn("label_en", str(ctx.exception))
+
+    def test_real_facts_toml_has_both_languages(self):
+        config = Config.load(Path(__file__).resolve().parents[3] / "site")
+        self.assertEqual(config.fact_labels, helpers.FACT_LABELS)
+        self.assertEqual(config.fact_labels_en, helpers.FACT_LABELS_EN)
 
 
 if __name__ == "__main__":

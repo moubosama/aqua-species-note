@@ -10,8 +10,8 @@ import unittest
 from pathlib import Path
 
 import helpers
-from checks import citations, structure
-from checks.site import Page
+from checks import citations, structure, translations
+from checks.site import Page, Site
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 FIXTURE = REPO_ROOT / "tools" / "check" / "fixtures" / "site-content"
@@ -31,7 +31,9 @@ class TemplatesWithHugoTest(unittest.TestCase):
         out = Path(cls._tmp.name) / "public"
         try:
             cls.result = subprocess.run(
-                [HUGO, "--source", "site", "--contentDir", str(FIXTURE), "--destination", str(out)],
+                # --printI18nWarnings: 画面の言葉（site/i18n/*.toml）のキーが足りないと警告になり、書き出しが止まる
+                [HUGO, "--source", "site", "--contentDir", str(FIXTURE), "--destination", str(out),
+                 "--printI18nWarnings"],
                 cwd=REPO_ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace",
                 timeout=120,
             )
@@ -39,10 +41,13 @@ class TemplatesWithHugoTest(unittest.TestCase):
             cls._tmp.cleanup()
             raise
         cls.pages = {}
-        for rel in ("species/test-fish/index.html", "compare/index.html"):
+        for rel in ("species/test-fish/index.html", "compare/index.html",
+                    "en/species/test-fish/index.html", "en/index.html", "index.html"):
             path = out / rel
             if path.is_file():
                 cls.pages[rel] = Page(rel, path.read_text(encoding="utf-8"))
+        files = {p.relative_to(out).as_posix() for p in out.rglob("*") if p.is_file()} if out.is_dir() else set()
+        cls.site = Site(out, list(cls.pages.values()), files)
 
     @classmethod
     def tearDownClass(cls):
@@ -88,6 +93,45 @@ class TemplatesWithHugoTest(unittest.TestCase):
         self.assertEqual(len(tables), 1)
         self.assertEqual(tables[0].attrs, {"class": 'a" b'})
         self.assertIn('<table class="a&#34; b">', page.source)
+
+
+    def test_english_page_uses_english_words_and_passes_the_english_checks(self):
+        # 英語版: <html lang="en">、表の列・印・日付の行が英語で、英語版の型の確認がすべて通る
+        page = self.page("en/species/test-fish/index.html")
+        self.assertEqual(page.root.find("html").get("lang"), "en")
+        self.assertEqual([f.message for f in structure.check_page(page, helpers.CONFIG)], [])
+        self.assertEqual([f.message for f in citations.check_page(page)], [])
+        badges = [b.text() for b in page.root.find_all("span", cls="badge")]
+        self.assertEqual(badges, ["Verified", "Needs checking"])
+        self.assertNotIn("記録なし", page.source)
+        self.assertIn('aria-label="Reference 5"', page.source)
+        # 見出しの This page's は、書き出すと曲がった引用符になる（確認のプログラムはそろえて比べる）
+        h4 = page.root.find("h4", attrs={"id": "this-pages-position"})
+        self.assertEqual(h4.text(), "This page’s position")
+
+    def test_header_links_and_language_switcher(self):
+        # ヘッダーのサイト名はその言語のトップへ。切り替えは訳があれば訳へ、なければ相手の言語のトップへ
+        en = self.page("en/species/test-fish/index.html")
+        self.assertEqual(en.root.find("header", cls="site").find("a").get("href"), "/aqua-species-note/en/")
+        switch = translations.switch_links(en)
+        self.assertEqual([(a.get("href"), a.get("hreflang"), a.text()) for a in switch],
+                         [("/aqua-species-note/species/test-fish/", "ja", "日本語")])
+        ja = self.page("species/test-fish/index.html")
+        self.assertEqual([a.get("href") for a in translations.switch_links(ja)],
+                         ["/aqua-species-note/en/species/test-fish/"])
+        compare = self.page("compare/index.html")  # 英語版の原稿がない
+        self.assertEqual([a.get("href") for a in translations.switch_links(compare)], ["/aqua-species-note/en/"])
+        self.assertEqual(translations.alternates(compare, helpers.CONFIG), {})
+        for rel in ("en/species/test-fish/index.html", "species/test-fish/index.html", "compare/index.html"):
+            found = translations.check_page(self.page(rel), self.site, helpers.CONFIG)
+            self.assertEqual(found, [], rel)
+
+    def test_cards_list_only_the_current_language(self):
+        # 種のカードは、その言語のページだけを並べる
+        ja_cards = [a.get("href") for a in self.page("index.html").root.find("ul", cls="cards").find_all("a")]
+        en_cards = [a.get("href") for a in self.page("en/index.html").root.find("ul", cls="cards").find_all("a")]
+        self.assertEqual(ja_cards, ["/aqua-species-note/species/test-fish/"])
+        self.assertEqual(en_cards, ["/aqua-species-note/en/species/test-fish/"])
 
 
 if __name__ == "__main__":

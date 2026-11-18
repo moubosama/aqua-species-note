@@ -54,5 +54,15 @@ class LinksTest(unittest.TestCase):
         self.assertTrue(any("style.css" in m for m in messages(missing_css)))
 
 
+class EmptyHrefTest(unittest.TestCase):
+    def test_empty_href_is_broken(self):
+        # 英語版の原稿がないページをメニューが指すと、Hugo は href="" を書き出す
+        found = messages(site_with('<h1>a</h1><a href="">Glossary</a>'))
+        self.assertEqual(found, ["リンク先が空です: 「Glossary」"])
+
+    def test_anchor_without_href_is_not_a_link(self):
+        self.assertEqual(messages(site_with('<h1>a</h1><a id="x">名前だけ</a>')), [])
+
+
 if __name__ == "__main__":
     unittest.main()

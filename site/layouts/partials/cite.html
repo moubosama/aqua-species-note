@@ -6,11 +6,13 @@
     ［ ］と区切りの文字（「、」「,」「，」と空白）はリンクの外にそのまま残す（D2、FR2）。
   - HTML をタグ（<…>）とタグの外の文字に分け、タグの外の文字だけを変える。
     属性の値（aria-label、alt、title など）の中の［n］はそのまま残す（D1、FR1）。
-  原稿の書き方は変えなくてよい。
+  原稿の書き方は変えなくてよい。英語版の原稿も同じ全角の［n］で書く。
+  aria-label の頭の言葉は i18n の cite（日本語版は「出典」、英語版は「Reference 」）。
 */ -}}
 {{- $one := `［(\d+)((?:[〜～\-–]\d+)?)］` -}}
 {{- $many := `［\d+(?:[〜～\-–]\d+)?(?:[\s　]*[、,，][\s　]*\d+(?:[〜～\-–]\d+)?)+］` -}}
-{{- $link := printf `<a class="cite" href="%s#ref-${1}" aria-label="出典${1}${2}">［${1}${2}］</a>` .base -}}
+{{- $label := T "cite" -}}
+{{- $link := printf `<a class="cite" href="%s#ref-${1}" aria-label="%s${1}${2}">［${1}${2}］</a>` .base $label -}}
 {{- $out := "" -}}
 {{- /* 1つ目の組はタグ、2つ目はタグの外の文字、3つ目はタグにならない「<」（文字を落とさないため） */ -}}
 {{- range findRESubmatch `(<[^>]*>)|([^<]+)|(<)` (string .html) -}}
@@ -22,7 +24,7 @@
       {{- /* 番号（範囲を含む）と区切りの文字に分ける。1つ目・2つ目の組が番号と範囲、3つ目が区切り */ -}}
       {{- range findRESubmatch `(\d+)((?:[〜～\-–]\d+)?)|(\D+)` (strings.TrimSuffix "］" (strings.TrimPrefix "［" $group)) -}}
         {{- if index . 1 -}}
-          {{- $links = printf `%s<a class="cite" href="%s#ref-%s" aria-label="出典%s%s">%s%s</a>` $links $.base (index . 1) (index . 1) (index . 2) (index . 1) (index . 2) -}}
+          {{- $links = printf `%s<a class="cite" href="%s#ref-%s" aria-label="%s%s%s">%s%s</a>` $links $.base (index . 1) $label (index . 1) (index . 2) (index . 1) (index . 2) -}}
         {{- else -}}
           {{- $links = print $links (index . 3) -}}
         {{- end -}}

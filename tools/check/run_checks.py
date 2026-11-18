@@ -15,12 +15,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from checks import citations, css, frontmatter, links, regressions, seo, structure  # noqa: E402
+from checks import (  # noqa: E402
+    citations, css, frontmatter, links, regressions, seo, structure, translations,
+)
 from checks.report import Report  # noqa: E402
 from checks.site import Config, ConfigError, Site  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-CHECKS = [frontmatter, structure, regressions, links, citations, seo, css]
+CHECKS = [frontmatter, structure, regressions, translations, links, citations, seo, css]
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:

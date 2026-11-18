@@ -1,0 +1,147 @@
+# 画面に出る決まった言葉（英語版）。日本語版は ja.toml。キーは両方で同じにする。
+# 章の名前・表の列・印などの言葉は aidlc/spaces/default/knowledge/english-version-spec.md で決めたもの。
+# 確認のプログラム（tools/check/checks/site.py の LANGS）も同じ言葉を使うので、変えたらそちらも直す。
+
+# 共通（ヘッダー・フッター・日付）
+[site_nav]
+other = "Site"
+[footer_note]
+other = "Information is as of each page's update date. Keep fish at your own risk. Shop pages are listed as sources for prices and records, not as recommendations."
+[og_locale]
+other = "en_US"
+[published]
+other = "Published"
+[updated]
+other = "Updated"
+[table]
+other = "Table"
+[cite]
+other = "Reference "
+
+# 種ページ
+[toc]
+other = "Contents"
+[facts]
+other = "Key facts"
+[no_record]
+other = "No record"
+[breeding_records]
+other = "Breeding records"
+[breeding_caption]
+one = "Breeding records ({{ .Count }} record)"
+other = "Breeding records ({{ .Count }} records)"
+[breeding_empty]
+other = "No breeding records have been found yet."
+[col_who]
+other = "Who"
+[col_when]
+other = "When"
+[col_water]
+other = "Water"
+[col_trigger]
+other = "Trigger"
+[col_eggs]
+other = "Eggs"
+[col_hatch_days]
+other = "Days to hatch"
+[col_fry]
+other = "Raising fry"
+[col_failures]
+other = "Failures"
+[col_refs]
+other = "Sources"
+# 確認の状態の印（原稿の status の値は日本語のまま。画面ではこの言葉を出す）
+[badge_ok]
+other = "Verified"
+[badge_warn]
+other = "Needs checking"
+[badge_none]
+other = "Unverified"
+
+# トップページ
+[eyebrow]
+other = "RARE TROPICAL FISH ・ FIELD NOTES"
+[read_latest]
+other = "Read the latest note"
+[compare_species]
+other = "Compare across species"
+[howto_title]
+other = "How to read the numbers"
+[howto_ref_mark]
+other = "［n］"
+[howto_ref]
+other = "Source number. Tap it to jump to the references at the end of the page."
+[howto_ok]
+other = "A record checked against the original source."
+[howto_warn]
+other = "A number picked up from subtitles or hearsay. It may have been misheard."
+[howto_none]
+other = "The original source could not be opened, so it has not been checked."
+[notes_title]
+other = "Species notes"
+[no_species]
+other = "There are no species pages yet."
+[steps_title]
+other = "How these notes are made"
+[step1_title]
+other = "Collect records from around the world"
+[step1_text]
+other = "Taxonomic papers, breeding diaries on overseas forums, Japanese blogs and shop arrival records."
+[step2_title]
+other = "Check against the originals"
+[step2_text]
+other = "Numbers are checked in the original sources, and how far they were checked is shown as Verified, Needs checking or Unverified."
+[step3_title]
+other = "Summarize in our own words"
+[step3_text]
+other = "No text or photos are copied. What is not known is written as not known."
+
+# 比較ページ
+[compare_caption]
+other = "Breeding records by species"
+[compare_col_species]
+other = "Species"
+[compare_col_count]
+other = "Breeding records"
+[compare_col_hatch]
+other = "Days to hatch (range)"
+[compare_col_eggs]
+other = "Eggs per spawning (range)"
+[compare_col_temp]
+other = "Temperature (range)"
+[compare_count]
+one = "{{ .Count }} record"
+other = "{{ .Count }} records"
+[compare_excluded]
+one = " ({{ .Count }} record from a related species or inference is not included in the ranges)"
+other = " ({{ .Count }} records from related species or inference are not included in the ranges)"
+[compare_one]
+other = "There is only one species so far. More will be listed as species are added."
+[range_one]
+other = "{{ .lo }} {{ .unit }}"
+[range_many]
+other = "{{ .lo }}–{{ .hi }} {{ .unit }}"
+[unit_days]
+other = "days"
+[unit_eggs]
+other = "eggs"
+[unit_temp]
+other = "°C"
+
+# 更新履歴
+[updates_label]
+other = "Updates"
+[updates_caption]
+other = "Updates (newest first)"
+[updates_col_page]
+other = "Page"
+
+# 見つからないページ（404）
+[notfound_title]
+other = "Page not found"
+[notfound_text]
+other = "The URL may have changed, or the page may have been removed."
+[back_home]
+other = "Back to the top"
+[species_list]
+other = "Species list"

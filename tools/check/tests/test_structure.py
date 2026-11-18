@@ -113,5 +113,50 @@ class SpeciesStructureTest(unittest.TestCase):
         self.assertEqual(problems_of(page), [])
 
 
+class EnglishStructureTest(unittest.TestCase):
+    """英語版（en/ の下）の種ページは、英語の章・小見出し・表の列・日付の行・要点の項目で確かめる。"""
+
+    def test_valid_english_species_page_passes(self):
+        self.assertEqual(problems_of(helpers.en_species_page()), [])
+        self.assertEqual(problems_of(helpers.plain_page("en/glossary/index.html", lang="en")), [])
+
+    def test_english_page_needs_lang_en(self):
+        page = helpers.plain_page("en/glossary/index.html", lang="ja")
+        self.assertIn('<html lang="en"> がありません（M1）', problems_of(page))
+
+    def test_english_page_with_japanese_chapters_fails(self):
+        problems = problems_of(helpers.en_species_page(chapters=CHAPTERS))
+        self.assertTrue(any("1 番目の章が「1. はじめに」です（「1. Introduction」で始める）" in p
+                            for p in problems), problems)
+
+    def test_english_legal_section_needs_all_four_subheadings(self):
+        legal = ("<h3>Legality and regulation</h3><h4>What is known</h4><h4>What is not known</h4>"
+                 "<h4>Japanese regulations: date checked</h4>")
+        problems = problems_of(helpers.en_species_page(legal=legal))
+        self.assertTrue(any("This page's position" in p for p in problems), problems)
+        # 書き出すと ' が ’ になる（goldmark）。曲がった引用符でも通る
+        curly = legal + "<h4>This page\u2019s position</h4>"
+        self.assertEqual(problems_of(helpers.en_species_page(legal=curly)), [])
+
+    def test_english_facts_breeding_dates_and_toc(self):
+        ja_facts = helpers.facts_table()
+        self.assertTrue(any("要点の表の項目" in p for p in problems_of(helpers.en_species_page(facts=ja_facts))))
+        ja_breeding = helpers.breeding_table([["a"] * 9])
+        self.assertTrue(any("繁殖記録の表の列" in p
+                            for p in problems_of(helpers.en_species_page(breeding=ja_breeding))))
+        ja_dates = '<p class="updated">公開日 <time>2026-11-16</time> / 更新日 <time>2026-11-16</time></p>'
+        self.assertTrue(any("Published YYYY-MM-DD" in p
+                            for p in problems_of(helpers.en_species_page(dates=ja_dates))))
+        ja_toc = '<nav class="toc" aria-label="目次"><ul></ul></nav>'
+        self.assertTrue(any('aria-label="Contents"' in p
+                            for p in problems_of(helpers.en_species_page(toc=ja_toc))))
+
+    def test_english_empty_breeding_message(self):
+        good = '<p class="empty">No breeding records have been found yet.</p>'
+        self.assertEqual(problems_of(helpers.en_species_page(breeding=good)), [])
+        japanese = '<p class="empty">繁殖の記録はまだ見つかっていません。</p>'
+        self.assertTrue(any("FR1.3" in p for p in problems_of(helpers.en_species_page(breeding=japanese))))
+
+
 if __name__ == "__main__":
     unittest.main()

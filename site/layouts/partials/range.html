@@ -1,6 +1,7 @@
 {{- /*
   比較ページの「数字の幅」1つ（R-02）。引数: rows（本種の繁殖記録）、min・max（欄の名前）、
-  unit（単位）、page（種ページ）。両方の欄に数字がある記録だけを使い、出典番号を種ページへのリンクにする。
+  unit（単位）、page（種ページ）。
+  数字の幅の書き方（「5〜7日」「5–7 days」）と、空のときの文言は site/i18n/*.toml。両方の欄に数字がある記録だけを使い、出典番号を種ページへのリンクにする。
 */ -}}
 {{- $lo := -1.0 -}}
 {{- $hi := -1.0 -}}
@@ -15,12 +16,13 @@
     {{- range findRE `\d+` $row.refs }}{{ $refs = $refs | append (int .) }}{{ end -}}
   {{- end -}}
 {{- end -}}
-{{- $out := "記録なし" -}}
+{{- $out := T "no_record" -}}
 {{- if ge $hi 0.0 -}}
-  {{- $text := cond (eq $lo $hi) (printf "%g%s" $lo .unit) (printf "%g〜%g%s" $lo $hi .unit) -}}
+  {{- $nums := dict "lo" (printf "%g" $lo) "hi" (printf "%g" $hi) "unit" .unit -}}
+  {{- $text := cond (eq $lo $hi) (T "range_one" $nums) (T "range_many" $nums) -}}
   {{- $cites := "" -}}
   {{- range sort (uniq $refs) -}}
-    {{- $cites = printf `%s<a class="cite" href="%s#ref-%d" aria-label="出典%d">［%d］</a>` $cites $.page.RelPermalink . . . -}}
+    {{- $cites = printf `%s<a class="cite" href="%s#ref-%d" aria-label="%s%d">［%d］</a>` $cites $.page.RelPermalink . (T "cite") . . -}}
   {{- end -}}
   {{- $out = print $text $cites -}}
 {{- end -}}

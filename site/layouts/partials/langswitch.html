@@ -1,0 +1,16 @@
+{{- /*
+  言語の切り替え（ヘッダーのメニューの後ろ）。日本語版には「English」、英語版には「日本語」を出す。
+  そのページの訳があれば訳へ、なければその言語のトップへ移る（english-version-spec.md）。
+  文字は hugo.toml の languages.*.label。lang・hreflang で、リンク先の言語を示す。
+*/ -}}
+{{- $page := . -}}
+{{- range site.Home.Translations -}}
+  {{- $target := . -}}
+  {{- $lang := .Language.Lang -}}
+  {{- if ne $page.Kind "404" -}}
+    {{- range $page.Translations -}}
+      {{- if eq .Language.Lang $lang }}{{ $target = . }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+<li class="lang"><a href="{{ $target.RelPermalink }}" lang="{{ .Language.Locale }}" hreflang="{{ .Language.Locale }}">{{ .Language.Label }}</a></li>
+{{- end -}}

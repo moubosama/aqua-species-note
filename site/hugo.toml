@@ -2,35 +2,77 @@
 # 書き出し: リポジトリのルートで hugo --source site --cleanDestinationDir
 publishDir = "../docs"
 baseURL = "https://moubosama.github.io/aqua-species-note/"
-languageCode = "ja"
-title = "熱帯魚 種類別ノート"
+# 日本語版はサイトの根（/aqua-species-note/）、英語版は /aqua-species-note/en/ に置く。
+# 英語の原稿は日本語の原稿の横に .en.md を付けて置く（aidlc/spaces/default/knowledge/english-version-spec.md）。
+defaultContentLanguage = "ja"
+defaultContentLanguageInSubdir = false
+# /ja/ から根へ移るだけのページ（ja/index.html）を書き出さない
+disableDefaultLanguageRedirect = true
 # 使っていないタグ・カテゴリーのページを書き出さない（D3）
 disableKinds = ["taxonomy", "term"]
 # 警告が1件でも出たら書き出しを失敗にする（FR9.1）
 panicOnWarning = true
-[params]
-  description = "珍しい熱帯魚を1種類ずつ、論文・海外の繁殖報告・飼育記録から調べてまとめるサイト"
 [markup.goldmark.renderer]
   unsafe = true
 [markup.goldmark.parser.attribute]
   block = true   # 表の下の {caption="…"} で表の名前を付ける
   title = true   # 見出しの {#id}
+# 多言語のサイトで Hugo が自動で使う、リンクと画像の組み込みの書き方を使わない。
+# 使うと、本文の URL の書き出し方（&amp; や括弧）が1言語のときと変わってしまう。
+[markup.goldmark.renderHooks.link]
+  useEmbedded = "never"
+[markup.goldmark.renderHooks.image]
+  useEmbedded = "never"
 [params.test]
-  noindex = true   # テスト公開中は検索エンジンに載せない
-# フッターに並べる付属ページ（pageRef は content の中の場所）
-[[menus.main]]
-  name = "種の一覧"
-  pageRef = "/species"
-  weight = 10
-[[menus.main]]
-  name = "比較"
-  pageRef = "/compare"
-  weight = 20
-[[menus.main]]
-  name = "用語集"
-  pageRef = "/glossary"
-  weight = 30
-[[menus.main]]
-  name = "更新履歴"
-  pageRef = "/updates"
-  weight = 40
+  noindex = true   # テスト公開中は検索エンジンに載せない（日本語版・英語版の両方）
+
+# 言語ごとの設定。画面の決まった言葉は site/i18n/ja.toml・en.toml に置く。
+# locale は <html lang> と hreflang に、label は言語の切り替えのリンクの文字に使う。
+[languages.ja]
+  locale = "ja"
+  label = "日本語"
+  title = "熱帯魚 種類別ノート"
+  weight = 1
+  [languages.ja.params]
+    description = "珍しい熱帯魚を1種類ずつ、論文・海外の繁殖報告・飼育記録から調べてまとめるサイト"
+  # ヘッダーに並べる付属ページ（pageRef は content の中の場所）
+  [[languages.ja.menus.main]]
+    name = "種の一覧"
+    pageRef = "/species"
+    weight = 10
+  [[languages.ja.menus.main]]
+    name = "比較"
+    pageRef = "/compare"
+    weight = 20
+  [[languages.ja.menus.main]]
+    name = "用語集"
+    pageRef = "/glossary"
+    weight = 30
+  [[languages.ja.menus.main]]
+    name = "更新履歴"
+    pageRef = "/updates"
+    weight = 40
+
+[languages.en]
+  locale = "en"
+  label = "English"
+  title = "Tropical Fish Species Notes"
+  weight = 2
+  [languages.en.params]
+    description = "Rare tropical fish, one species at a time, researched from papers, overseas breeding reports and keeping records"
+  [[languages.en.menus.main]]
+    name = "Species list"
+    pageRef = "/species"
+    weight = 10
+  [[languages.en.menus.main]]
+    name = "Compare"
+    pageRef = "/compare"
+    weight = 20
+  [[languages.en.menus.main]]
+    name = "Glossary"
+    pageRef = "/glossary"
+    weight = 30
+  [[languages.en.menus.main]]
+    name = "Updates"
+    pageRef = "/updates"
+    weight = 40
