@@ -26,7 +26,7 @@
 <span class="meta">{{ T "updated" }} <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2006-01-02" }}</time></span>
 <strong>{{ .Title }}</strong>
 <span class="sci">{{ partial "sci.html" . }}</span>
-<span class="latest-foot"><span class="chips"><span class="chip">{{ T "refs_count" (partial "refcount.html" .) }}</span><span class="chip">{{ T "breeding_count" (len (.Params.breeding | default slice)) }}</span></span><span class="go">{{ T "read" }}{{ $arrow }}</span></span>
+<span class="latest-foot"><span class="chips"><span class="chip">{{ T "refs_count" (partialCached "refcount.html" . .RelPermalink) }}</span><span class="chip">{{ T "breeding_count" (len (.Params.breeding | default slice)) }}</span></span><span class="go">{{ T "read" }}{{ $arrow }}</span></span>
 </span>
 </a>
 {{- end }}

@@ -157,6 +157,23 @@ def read_sitemaps(docs: Path, config: Config) -> tuple[Optional[str], list[str]]
     return "\n".join(parts), problems
 
 
+def check_root_sitemap(text: Optional[str]) -> list[str]:
+    """根の sitemap.xml は、日本語版・英語版のページを直接並べる（コードレビュー 2026-11-18）。
+
+    言語ごとのサイトマップの一覧（sitemapindex）にすると、根にある日本語版のページが
+    ja/sitemap.xml の置き場所の外の URL になり、検索エンジンに捨てられることがある。
+    """
+    if text is None:
+        return []  # sitemap.xml がないことは check_taxonomies が知らせる
+    if "<sitemapindex" in text:
+        return ["根の sitemap.xml が言語ごとのサイトマップの一覧になっています。"
+                "ページを直接並べてください（site/layouts/sitemapindex.xml）"]
+    return []
+
+
 def run(site: Site, config: Config, site_dir: Path) -> list[Finding]:
+    root_map = site.docs / "sitemap.xml"
+    root_text = root_map.read_text(encoding="utf-8") if root_map.is_file() else None
     sitemap, problems = read_sitemaps(site.docs, config)
+    problems += check_root_sitemap(root_text)
     return check_site(site, config, sitemap) + [Finding(NAME, "sitemap.xml", p) for p in problems]

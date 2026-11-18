@@ -5,7 +5,7 @@
 {{- with $species }}
 <ul class="cards">
 {{- range . }}
-<li><a href="{{ .RelPermalink }}"><small class="updated">{{ T "updated" }} {{ .Lastmod.Format "2006-01-02" }}</small><strong>{{ .Title }}</strong><span class="sci">{{ partial "sci.html" . }}</span><small>{{ .Description }}</small><small class="counts">{{ T "refs_count" (partial "refcount.html" .) }} ・ {{ T "breeding_count" (len (.Params.breeding | default slice)) }}</small></a></li>
+<li><a href="{{ .RelPermalink }}"><small class="updated">{{ T "updated" }} {{ .Lastmod.Format "2006-01-02" }}</small><strong>{{ .Title }}</strong><span class="sci">{{ partial "sci.html" . }}</span><small>{{ .Description }}</small><small class="counts">{{ T "refs_count" (partialCached "refcount.html" . .RelPermalink) }}{{ T "count_sep" }}{{ T "breeding_count" (len (.Params.breeding | default slice)) }}</small></a></li>
 {{- end }}
 </ul>
 {{- else }}

@@ -86,7 +86,7 @@ main.species .head .updated .sep{display:none}
 .ic-upd{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12a8 8 0 0114-5.3L20 9M20 4v5h-5M20 12a8 8 0 01-14 5.3L4 15M4 20v-5h5'/%3E%3C/svg%3E")}
 .ic-book{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2V5z'/%3E%3Cpath d='M4 19a2 2 0 012-2h13'/%3E%3C/svg%3E")}
 /* 要点：表のまま、1項目ずつのカードに並べる */
-.scroll:has(> .facts){overflow:visible;border:0;background:none;border-radius:0;margin:0}
+.scroll:has(> .facts){border:0;background:none;border-radius:0;margin:0}
 .facts{display:grid}
 .facts caption{padding:0 0 12px;font-size:.92em;font-weight:700;letter-spacing:.04em;color:var(--muted)}
 .facts tbody{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}

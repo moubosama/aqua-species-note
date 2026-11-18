@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  
-  <sitemap>
-    <loc>https://moubosama.github.io/aqua-species-note/ja/sitemap.xml</loc>
-    
-      <lastmod>2026-11-18T00:00:00+00:00</lastmod>
-    
-  </sitemap>
-  
-  <sitemap>
-    <loc>https://moubosama.github.io/aqua-species-note/en/sitemap.xml</loc>
-    
-      <lastmod>2026-11-18T00:00:00+00:00</lastmod>
-    
-  </sitemap>
-  
-</sitemapindex>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://moubosama.github.io/aqua-species-note/species/nannostomus-arc-red/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/species/hypancistrus-l046-zebra/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/species/potamotrygon-diamond-polka/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/species/tucanoichthys-tucano/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/species/protopterus-amphibius/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/species/protocheirodon-peru-glass/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/species/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/species/corydoras-cw111-zebrina/</loc><lastmod>2026-11-17</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/compare/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/glossary/</loc><lastmod>2026-11-16</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/updates/</loc></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/en/species/nannostomus-arc-red/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/en/species/potamotrygon-diamond-polka/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/en/species/protopterus-amphibius/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/en/species/protocheirodon-peru-glass/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/en/species/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/en/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/en/species/tucanoichthys-tucano/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/en/species/hypancistrus-l046-zebra/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/en/compare/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/en/species/corydoras-cw111-zebrina/</loc><lastmod>2026-11-17</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/en/glossary/</loc><lastmod>2026-11-16</lastmod></url>
+  <url><loc>https://moubosama.github.io/aqua-species-note/en/updates/</loc></url>
+</urlset>

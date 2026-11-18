@@ -167,6 +167,12 @@ class SitemapIndexTest(unittest.TestCase):
             self.write_docs(root, {"sitemap.xml": GOOD_SITEMAP})
             self.assertEqual(regressions.read_sitemaps(root, helpers.CONFIG), (GOOD_SITEMAP, []))
 
+    def test_root_sitemap_lists_pages_directly(self):
+        # 根の sitemap.xml が言語ごとの一覧だと、根にある日本語版のページが置き場所の外になる
+        self.assertEqual(len(regressions.check_root_sitemap(self.INDEX)), 1)
+        self.assertEqual(regressions.check_root_sitemap(GOOD_SITEMAP), [])
+        self.assertEqual(regressions.check_root_sitemap(None), [])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -228,7 +228,7 @@ def _check_compare_lastmod(path: Path, sources: list[Path]) -> list[Finding]:
         return []
     newest, newest_path = max(dated)
     if compare < newest:
-        name = newest_path.parent.name if newest_path.name.startswith("index.") else newest_path.stem
+        name = newest_path.parent.name if newest_path.name.startswith("index.") else newest_path.stem.split(".")[0]
         return [Finding(NAME, where,
                         f"比較ページの lastmod（{compare}）が、種のページのいちばん新しい更新日"
                         f"（{newest}、{name}）より前です。比較ページの lastmod を {newest} 以降にしてください（FR6）")]

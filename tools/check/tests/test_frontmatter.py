@@ -315,7 +315,7 @@ class EnglishSourcesTest(unittest.TestCase):
         # 日本語版の比較ページは日本語版の種（11-16）とだけ比べるので通り、英語版は 11-18 より前なので失敗
         self.assertEqual(len(found), 1, found)
         self.assertEqual(found[0][0], "index.en.md")
-        self.assertIn("2026-11-18、a-fish.en", found[0][1])
+        self.assertIn("2026-11-18、a-fish）", found[0][1])
 
 
 if __name__ == "__main__":

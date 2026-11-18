@@ -160,8 +160,10 @@ other = "Latest note"
 [read]
 other = "Read"
 [refs_count]
+one = "{{ .Count }} reference"
 other = "{{ .Count }} references"
 [breeding_count]
+one = "{{ .Count }} breeding record"
 other = "{{ .Count }} breeding records"
 [legend_sub]
 other = "Every page uses the same marks"
@@ -183,3 +185,5 @@ other = "Compare with other species"
 other = "Back to top"
 [compare_eyebrow]
 other = "COMPARE"
+[count_sep]
+other = " · "

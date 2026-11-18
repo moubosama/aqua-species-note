@@ -2,7 +2,7 @@
 {{- /* 種ページ（全種共通の型。デザイン案 2026-11-18 版）。章の見出しは原稿に {#id} 付きで書く（site/archetypes/species.md）。
   上から、現在地・題名・学名・日付・ボタン・要点のカード。その下に、広い画面では目次を左、本文を右に置く（狭い画面では目次が上）。
   章の見出しの頭の番号（「4.」）は、四角い印にして見せる。見出しの文字（「4. 繁殖記録の比較」）は変えない。 */ -}}
-{{- $refs := partial "refcount.html" . -}}
+{{- $refs := partialCached "refcount.html" . .RelPermalink -}}
 {{- $content := string .Content -}}
 <nav class="crumbs" aria-label="{{ T "breadcrumb" }}"><ol>
 <li><a href="{{ site.Home.RelPermalink }}">{{ T "home" }}</a></li>

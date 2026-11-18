@@ -1,14 +1,15 @@
 {{- /* 要点の表。項目と順番は site/data/facts.toml で決める（FR1.2）。値がなければ「記録なし」。
+  画面ではカードに並べる（CSS で表の display を変える）ため、読み上げで表として伝わるよう role を書いておく。
   表示名は日本語版が label、ほかの言語は label_<言語>（例: label_en）。 */ -}}
 {{- $page := . }}
 <div class="scroll" tabindex="0" role="region" aria-label="{{ T "facts" }}">
-<table class="facts"><caption>{{ T "facts" }}</caption><tbody>
+<table class="facts" role="table"><caption>{{ T "facts" }}</caption><tbody role="rowgroup">
 {{- range $item := site.Data.facts.items }}
 {{- $label := $item.label }}
 {{- with index $item (printf "label_%s" site.Language.Lang) }}{{ $label = . }}{{ end }}
 {{- $value := "" }}
 {{- with $page.Params.facts }}{{ $value = index . $item.key | default "" }}{{ end }}
-<tr><th scope="row">{{ $label }}</th><td>{{ with $value }}{{ partial "cite.html" (dict "html" (. | markdownify) "base" "") }}{{ else }}{{ T "no_record" }}{{ end }}</td></tr>
+<tr role="row"><th scope="row" role="rowheader">{{ $label }}</th><td role="cell">{{ with $value }}{{ partial "cite.html" (dict "html" (. | markdownify) "base" "") }}{{ else }}{{ T "no_record" }}{{ end }}</td></tr>
 {{- end }}
 </tbody></table>
 </div>

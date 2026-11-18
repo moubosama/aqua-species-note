@@ -1,0 +1,15 @@
+{{- /*
+  サイトの根の sitemap.xml。Hugo の標準は言語ごとのサイトマップの一覧（ja/sitemap.xml・en/sitemap.xml）だが、
+  日本語版のページはサイトの根にあり /ja/ の下にないので、ja/sitemap.xml からは「置き場所の外の URL」になる。
+  そこで、根の sitemap.xml に日本語版・英語版のすべてのページを直接並べる（コードレビュー 2026-11-18）。
+*/ -}}
+{{ printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{{- range hugo.Sites }}
+{{- range .Pages }}
+{{- if not .Sitemap.Disable }}
+  <url><loc>{{ .Permalink }}</loc>{{ if not .Lastmod.IsZero }}<lastmod>{{ .Lastmod.Format "2006-01-02" }}</lastmod>{{ end }}</url>
+{{- end }}
+{{- end }}
+{{- end }}
+</urlset>

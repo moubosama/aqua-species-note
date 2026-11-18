@@ -12,8 +12,6 @@ from .site import JA, Config, LangRules, Page
 
 NAME = "structure"
 HEADING = re.compile(r"^h([1-6])$")
-# 日本語版の日付の行（英語版は site.py の EN.date_line）
-DATE_LINE = JA.date_line
 
 
 def plain_quotes(text: str) -> str:

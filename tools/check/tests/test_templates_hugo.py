@@ -153,7 +153,7 @@ class TemplatesWithHugoTest(unittest.TestCase):
         counts = home.root.find("ul", cls="cards").find("small", cls="counts").text()
         self.assertRegex(counts, r"参考文献 \d+件 ・ 繁殖記録 \d+件")
         en_counts = self.page("en/index.html").root.find("ul", cls="cards").find("small", cls="counts").text()
-        self.assertRegex(en_counts, r"\d+ references ・ \d+ breeding records")
+        self.assertRegex(en_counts, r"\d+ references · \d+ breeding records")
 
 
 if __name__ == "__main__":
