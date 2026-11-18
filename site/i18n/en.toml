@@ -156,7 +156,7 @@ other = "Every number has a source"
 [point2]
 other = "How well each record was checked is shown in three levels"
 [point3]
-other = "What cannot be checked is written as not known"
+other = "Gaps are marked unknown, never filled with guesses"
 [latest_note]
 other = "Latest note"
 [read]
