@@ -77,6 +77,15 @@ failures = "記録なし"
 refs = "13"
 kind = "本種"
 status = "要確認"
+
+[photo]
+file = "nannostomus-arc-red.jpg"
+alt = "ナノストムス・モルテンタレリ（Nannostomus mortenthaleri）"
+author = "Brian Gratwicke"
+license = "CC BY 2.0"
+license_url = "https://creativecommons.org/licenses/by/2.0/"
+source_url = "https://commons.wikimedia.org/wiki/File:Red_Pencilfish.jpg"
+note = "大きさを縮小して表示しています。種の名前は Wikimedia Commons の記載によります。"
 +++
 ## 1. はじめに ― このページの作り方 {#intro}
 

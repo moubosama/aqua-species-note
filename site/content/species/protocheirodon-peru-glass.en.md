@@ -18,6 +18,15 @@ price = "November 2026 (online shops, 1 fish): 2,550–2,600 yen［17］［19］
 
 # No [[breeding]] entries are written, because no dated record of captive breeding with known details was found for this species, either abroad or in Japan
 # (the page shows "No breeding records have been found yet.").
+
+[photo]
+file = "protocheirodon-peru-glass.jpg"
+alt = "Protocheirodon pi"
+author = "-serwacy01-"
+license = "CC BY-SA 4.0"
+license_url = "https://creativecommons.org/licenses/by-sa/4.0/"
+source_url = "https://commons.wikimedia.org/wiki/File:Protocheirodon_pi.jpg"
+note = "Shown at a reduced size. The species name is as given by the photographer."
 +++
 ## 1. Introduction — how this page was made {#intro}
 

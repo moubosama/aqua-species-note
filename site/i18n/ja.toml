@@ -181,5 +181,7 @@ other = "ほかの種と比べる"
 other = "ページの先頭へ"
 [compare_eyebrow]
 other = "COMPARE"
+[photo_credit]
+other = "写真"
 [count_sep]
 other = " ・ "

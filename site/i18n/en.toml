@@ -187,5 +187,7 @@ other = "Compare with other species"
 other = "Back to top"
 [compare_eyebrow]
 other = "COMPARE"
+[photo_credit]
+other = "Photo"
 [count_sep]
 other = " · "

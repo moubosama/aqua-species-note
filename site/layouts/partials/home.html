@@ -21,7 +21,7 @@
 </div>
 {{- with $first }}
 <a class="latest" href="{{ .RelPermalink }}">
-<span class="latest-band" aria-hidden="true">{{ partial "logo.html" 64 }}<span class="pill">{{ T "latest_note" }}</span></span>
+<span class="latest-band" aria-hidden="true">{{ with .Params.photo }}<img src="{{ printf "img/species/%s" .file | relURL }}" alt="" decoding="async">{{ else }}{{ partial "logo.html" 64 }}{{ end }}<span class="pill">{{ T "latest_note" }}</span></span>
 <span class="latest-body">
 <span class="meta">{{ T "updated" }} <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2006-01-02" }}</time></span>
 <strong>{{ .Title }}</strong>

@@ -18,6 +18,15 @@ price = "May–November 2026 (Yahoo! Auctions, 1 fish): 24,800–48,000 yen［25
 
 # No [[breeding]] entries are written, because no dated record of captive breeding with known details was found, for this species or for related species
 # (the page shows "No breeding records have been found yet."). The wild numbers for related species are written in the text of chapter 4.
+
+[photo]
+file = "protopterus-amphibius.jpg"
+alt = "Gilled lungfish (Protopterus amphibius)"
+author = "Jony Cooper"
+license = "CC BY-SA 4.0"
+license_url = "https://creativecommons.org/licenses/by-sa/4.0/"
+source_url = "https://commons.wikimedia.org/wiki/File:East_African_lungfish.jpg"
+note = "Shown at a reduced size. The species name is as given by the photographer."
 +++
 ## 1. Introduction — how this page was made {#intro}
 

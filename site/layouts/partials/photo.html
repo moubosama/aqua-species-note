@@ -1,0 +1,10 @@
+{{- /* 種の写真と、その出典（撮った人・使ってよい条件・元のファイル）。原稿のフロントマター [photo] から作る。
+  写真は、自分で撮ったものか、使ってよいと公開・許可されたもの（CC0・パブリックドメイン・CC BY・CC BY-SA）だけを使う（project.md）。
+  CC BY・CC BY-SA は、撮った人の名前・使ってよい条件とそのリンク・元のファイルへのリンクを必ず表示する。
+  [photo] のキー: file（site/static/img/species/ の中のファイル名）、alt、author、license、license_url（なければ省く）、source_url、note（任意）。 */ -}}
+{{- with .Params.photo }}
+<figure class="photo">
+<img src="{{ printf "img/species/%s" .file | relURL }}" alt="{{ .alt }}" loading="lazy" decoding="async">
+<figcaption>{{ T "photo_credit" }}: {{ .author }} / {{ with .license_url }}<a href="{{ . }}" rel="license">{{ $.Params.photo.license }}</a>{{ else }}{{ .license }}{{ end }} / <a href="{{ .source_url }}">Wikimedia Commons</a>{{ with .note }}<br>{{ . }}{{ end }}</figcaption>
+</figure>
+{{- end }}

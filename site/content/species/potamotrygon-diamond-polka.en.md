@@ -83,6 +83,14 @@ failures = "In December 2021, at least 6 young died within a few days (cause unk
 refs = "11"
 kind = "本種"
 status = "確認済み"
+
+[photo]
+file = "potamotrygon-diamond-polka.jpg"
+alt = "White-blotched river stingray (Potamotrygon leopoldi) at an aquarium in Dallas, USA"
+author = "Michael-David Bradford (Mrbradford)"
+license = "Public domain"
+source_url = "https://commons.wikimedia.org/wiki/File:Potamotrygon_leopoldi.jpg"
+note = "A photo of the species (Potamotrygon leopoldi), not of a fish sold as a \"diamond polka\"."
 +++
 ## 1. Introduction — how this page was made {#intro}
 

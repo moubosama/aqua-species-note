@@ -18,6 +18,15 @@ price = "2026年5〜11月（ヤフオク、1匹）: 24,800〜48,000円［25］�
 
 # 繁殖記録は、本種・近縁種とも、日付と中身の分かる飼育下の記録が見つからなかったので [[breeding]] は書いていない
 # （ページには「繁殖の記録はまだ見つかっていません。」と出る）。近縁種の野生の数字は第4章の本文に書いた。
+
+[photo]
+file = "protopterus-amphibius.jpg"
+alt = "プロトプテルス・アンフィビウス（Protopterus amphibius）"
+author = "Jony Cooper"
+license = "CC BY-SA 4.0"
+license_url = "https://creativecommons.org/licenses/by-sa/4.0/"
+source_url = "https://commons.wikimedia.org/wiki/File:East_African_lungfish.jpg"
+note = "大きさを縮小して表示しています。種の名前は撮影者の記載によります。"
 +++
 ## 1. はじめに ― このページの作り方 {#intro}
 

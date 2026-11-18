@@ -126,6 +126,7 @@ def check_species(page: Page, config: Config) -> list[str]:
     problems += _check_facts(main, config.labels_for(page.lang))
     problems += _check_breeding(main, rules)
     problems += _check_header(main, rules)
+    problems += check_photo(main)
     return problems
 
 
@@ -197,6 +198,24 @@ def _check_breeding(main: Element, rules: LangRules = JA) -> list[str]:
     return [f"繁殖記録の表の {i} 行目に空欄があります（「記録なし」と書く）"
             for i, tr in enumerate(body.find_all("tr"), start=1)
             if tr.find("td") is not None and any(not td.text().strip() for td in tr.find_all("td"))]
+
+
+def check_photo(main: Element) -> list[str]:
+    """種の写真（figure.photo）には、説明（alt）と、撮った人・使ってよい条件・元のファイルへのリンクの出典を付ける。
+
+    写真は、自分で撮ったものか、使ってよいと公開・許可されたものだけを使う（project.md）。
+    CC BY・CC BY-SA は出典の表示が条件なので、出典のない写真は失敗にする。
+    """
+    problems = []
+    for fig in main.find_all("figure", cls="photo"):
+        img = fig.find("img")
+        if img is None or not img.get("alt").strip():
+            problems.append("種の写真に説明（alt）がありません")
+        caption = fig.find("figcaption")
+        links = caption.find_all("a") if caption is not None else []
+        if caption is None or not caption.text().strip() or not links:
+            problems.append("種の写真に出典（撮った人・使ってよい条件・元のファイルへのリンク）がありません")
+    return problems
 
 
 def _check_header(main: Element, rules: LangRules = JA) -> list[str]:

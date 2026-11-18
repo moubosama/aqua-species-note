@@ -18,6 +18,15 @@ price = "2026年11月（通販、1匹）: 2,550〜2,600円［17］［19］。202
 
 # 繁殖記録は、本種について日付と中身の分かる飼育下の記録が海外にも国内にも見つからなかったので [[breeding]] は書いていない
 # （ページには「繁殖の記録はまだ見つかっていません。」と出る）。
+
+[photo]
+file = "protocheirodon-peru-glass.jpg"
+alt = "プロトケイロドン・パイ（Protocheirodon pi）"
+author = "-serwacy01-"
+license = "CC BY-SA 4.0"
+license_url = "https://creativecommons.org/licenses/by-sa/4.0/"
+source_url = "https://commons.wikimedia.org/wiki/File:Protocheirodon_pi.jpg"
+note = "大きさを縮小して表示しています。種の名前は撮影者の記載によります。"
 +++
 ## 1. はじめに ― このページの作り方 {#intro}
 

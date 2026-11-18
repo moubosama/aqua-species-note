@@ -160,6 +160,15 @@ kind = "本種"
 status = "確認済み"
 eggs_min = 12
 eggs_max = 13
+
+[photo]
+file = "hypancistrus-l046-zebra.jpg"
+alt = "A young zebra pleco (Hypancistrus zebra)"
+author = "Birger A"
+license = "CC BY-SA 3.0"
+license_url = "https://creativecommons.org/licenses/by-sa/3.0/"
+source_url = "https://commons.wikimedia.org/wiki/File:Hypancistrus_zebra4305.jpg"
+note = "Shown at a reduced size. The species name is as given by the photographer."
 +++
 ## 1. Introduction — how this page was made {#intro}
 

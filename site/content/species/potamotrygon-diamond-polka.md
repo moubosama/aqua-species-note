@@ -83,6 +83,14 @@ failures = "2021年12月、子が数日のうちに少なくとも6匹死んだ�
 refs = "11"
 kind = "本種"
 status = "確認済み"
+
+[photo]
+file = "potamotrygon-diamond-polka.jpg"
+alt = "ポルカドットスティングレイ（Potamotrygon leopoldi）。米国ダラスの水族館で撮影"
+author = "Michael-David Bradford (Mrbradford)"
+license = "パブリックドメイン"
+source_url = "https://commons.wikimedia.org/wiki/File:Potamotrygon_leopoldi.jpg"
+note = "種（Potamotrygon leopoldi）の写真で、「ダイヤモンドポルカ」として売られる個体ではありません。"
 +++
 ## 1. はじめに ― このページの作り方 {#intro}
 

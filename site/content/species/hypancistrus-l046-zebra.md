@@ -160,6 +160,15 @@ kind = "本種"
 status = "確認済み"
 eggs_min = 12
 eggs_max = 13
+
+[photo]
+file = "hypancistrus-l046-zebra.jpg"
+alt = "インペリアルゼブラプレコ（Hypancistrus zebra）の若い個体"
+author = "Birger A"
+license = "CC BY-SA 3.0"
+license_url = "https://creativecommons.org/licenses/by-sa/3.0/"
+source_url = "https://commons.wikimedia.org/wiki/File:Hypancistrus_zebra4305.jpg"
+note = "大きさを縮小して表示しています。種の名前は撮影者の記載によります。"
 +++
 ## 1. はじめに ― このページの作り方 {#intro}
 
