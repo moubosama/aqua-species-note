@@ -3,7 +3,7 @@ title = "Comparison across species"
 type = "compare"
 description = "From the breeding records on each species page, the days to hatch, number of eggs and water temperature range are lined up species by species."
 date = 2026-11-16
-lastmod = 2026-11-17
+lastmod = 2026-11-18
 +++
 This page lines up only a summary from the "Breeding records compared" section of each species page. Please check the detailed records and sources on each species page.
 

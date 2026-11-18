@@ -2,6 +2,35 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://moubosama.github.io/aqua-species-note/species/tucanoichthys-tucano/</loc>
+    <lastmod>2026-11-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://moubosama.github.io/aqua-species-note/species/</loc>
+    <lastmod>2026-11-18T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://moubosama.github.io/aqua-species-note/en/species/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="ja"
+                href="https://moubosama.github.io/aqua-species-note/species/"
+                />
+  </url><url>
+    <loc>https://moubosama.github.io/aqua-species-note/</loc>
+    <lastmod>2026-11-18T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://moubosama.github.io/aqua-species-note/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="ja"
+                href="https://moubosama.github.io/aqua-species-note/"
+                />
+  </url><url>
     <loc>https://moubosama.github.io/aqua-species-note/species/corydoras-cw111-zebrina/</loc>
     <lastmod>2026-11-17T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -15,21 +44,8 @@
                 href="https://moubosama.github.io/aqua-species-note/species/corydoras-cw111-zebrina/"
                 />
   </url><url>
-    <loc>https://moubosama.github.io/aqua-species-note/species/</loc>
-    <lastmod>2026-11-17T00:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://moubosama.github.io/aqua-species-note/en/species/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="ja"
-                href="https://moubosama.github.io/aqua-species-note/species/"
-                />
-  </url><url>
     <loc>https://moubosama.github.io/aqua-species-note/compare/</loc>
-    <lastmod>2026-11-17T00:00:00+00:00</lastmod>
+    <lastmod>2026-11-18T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -39,19 +55,6 @@
                 rel="alternate"
                 hreflang="ja"
                 href="https://moubosama.github.io/aqua-species-note/compare/"
-                />
-  </url><url>
-    <loc>https://moubosama.github.io/aqua-species-note/</loc>
-    <lastmod>2026-11-17T00:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://moubosama.github.io/aqua-species-note/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="ja"
-                href="https://moubosama.github.io/aqua-species-note/"
                 />
   </url><url>
     <loc>https://moubosama.github.io/aqua-species-note/glossary/</loc>
