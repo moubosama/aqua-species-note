@@ -1,0 +1,35 @@
+# 種ページの「要点の表」の項目。全種で同じ8項目・同じ順に並ぶ（FR1.2）。
+# 表示名と順番はここだけで決める。原稿（site/content/species/*.md）の [facts] は key で値を書く。
+# 確認のプログラム（tools/check/）もこのファイルを読むので、変えたら書き出して確認をやり直す。
+
+[[items]]
+key = "trade_names"
+label = "流通名"
+
+[[items]]
+key = "taxonomy"
+label = "分類（学名の状態）"
+
+[[items]]
+key = "origin"
+label = "産地"
+
+[[items]]
+key = "size"
+label = "大きさ"
+
+[[items]]
+key = "temperature"
+label = "水温"
+
+[[items]]
+key = "water"
+label = "水質（pH など）"
+
+[[items]]
+key = "breeding"
+label = "繁殖"
+
+[[items]]
+key = "price"
+label = "相場（時期つき）"

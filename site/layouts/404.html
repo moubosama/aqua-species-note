@@ -1,0 +1,11 @@
+{{ define "main" }}
+{{- /* 見つからないページ（D4）。GitHub Pages はどの URL でもこのページを返すので、リンクはサイトの根からの形にする。 */ -}}
+<h1>ページが見つかりません</h1>
+<p>URL が変わったか、ページがなくなった可能性があります。</p>
+<ul class="links">
+<li><a href="{{ site.Home.RelPermalink }}">トップへ戻る</a></li>
+{{- with site.GetPage "/species" }}
+<li><a href="{{ .RelPermalink }}">種の一覧</a></li>
+{{- end }}
+</ul>
+{{ end }}

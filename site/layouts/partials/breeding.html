@@ -1,0 +1,21 @@
+{{- /*
+  繁殖記録の表（FR1.3）。フロントマターの [[breeding]] から作る。分からない欄は「記録なし」。
+  出典は［n］の形で出し、ページ全体の出典リンクの処理（cite.html）でリンクになる。
+*/ -}}
+{{- $rows := .Params.breeding -}}
+{{- $keys := slice "who" "when" "water" "trigger" "eggs" "hatch_days" "fry" "failures" -}}
+{{- $heads := slice "誰が" "いつ" "どんな水で" "きっかけ" "卵の数" "孵化までの日数" "稚魚の育て方" "失敗例" "出典" -}}
+{{- if $rows }}
+<div class="scroll" tabindex="0" role="region" aria-label="繁殖記録">
+<table class="breeding"><caption>繁殖記録（{{ len $rows }}件）</caption>
+<thead><tr>{{ range $heads }}<th scope="col">{{ . }}</th>{{ end }}</tr></thead>
+<tbody>
+{{- range $row := $rows }}
+<tr>{{ range $keys }}<td>{{ with index $row . }}{{ . | markdownify }}{{ else }}記録なし{{ end }}</td>{{ end -}}
+<td>{{ range split $row.refs "," }}［{{ trim . " " }}］{{ end }}</td></tr>
+{{- end }}
+</tbody></table>
+</div>
+{{- else }}
+<p class="empty">繁殖の記録はまだ見つかっていません。</p>
+{{- end }}

@@ -1,0 +1,67 @@
+{
+  "stage": "code-generation",
+  "upstream_ids": [
+    "FR1.1",
+    "FR2.1",
+    "FR3.1",
+    "FR4.1",
+    "FR5.1",
+    "FR6.1",
+    "NFR1",
+    "NFR2",
+    "NFR3",
+    "NFR4"
+  ],
+  "coverage": [
+    {
+      "id": "FR1.1",
+      "status": "OK",
+      "target": "tools/check/checks/structure.py"
+    },
+    {
+      "id": "FR2.1",
+      "status": "OK",
+      "target": "tools/check/checks/citations.py"
+    },
+    {
+      "id": "FR3.1",
+      "status": "OK",
+      "target": "tools/check/tests/test_frontmatter.py"
+    },
+    {
+      "id": "FR4.1",
+      "status": "OK",
+      "target": "tools/check/tests/test_frontmatter.py"
+    },
+    {
+      "id": "FR5.1",
+      "status": "OK",
+      "target": "tools/check/checks/structure.py"
+    },
+    {
+      "id": "FR6.1",
+      "status": "OK",
+      "target": "tools/check/checks/frontmatter.py"
+    },
+    {
+      "id": "NFR1",
+      "status": "OK",
+      "target": "tools/check/run_checks.py"
+    },
+    {
+      "id": "NFR2",
+      "status": "OK",
+      "target": "docs/species/corydoras-cw111-zebrina/index.html"
+    },
+    {
+      "id": "NFR3",
+      "status": "OK",
+      "target": "tools/check/tests/test_templates_hugo.py"
+    },
+    {
+      "id": "NFR4",
+      "status": "OK",
+      "target": "tools/check/checks/regressions.py"
+    }
+  ]
+}

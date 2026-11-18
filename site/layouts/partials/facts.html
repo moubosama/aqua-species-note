@@ -1,0 +1,11 @@
+{{- /* 要点の表。項目と順番は site/data/facts.toml で決める（FR1.2）。値がなければ「記録なし」。 */ -}}
+{{- $page := . }}
+<div class="scroll" tabindex="0" role="region" aria-label="要点">
+<table class="facts"><caption>要点</caption><tbody>
+{{- range $item := site.Data.facts.items }}
+{{- $value := "" }}
+{{- with $page.Params.facts }}{{ $value = index . $item.key | default "" }}{{ end }}
+<tr><th scope="row">{{ $item.label }}</th><td>{{ with $value }}{{ partial "cite.html" (dict "html" (. | markdownify) "base" "") }}{{ else }}記録なし{{ end }}</td></tr>
+{{- end }}
+</tbody></table>
+</div>

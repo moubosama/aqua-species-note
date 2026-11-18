@@ -1,10 +1,36 @@
+# Hugo 0.158.0（extended）で書き出す前提の設定。README と .github/workflows/check.yml も同じ版にそろえる。
+# 書き出し: リポジトリのルートで hugo --source site --cleanDestinationDir
 publishDir = "../docs"
 baseURL = "https://moubosama.github.io/aqua-species-note/"
 languageCode = "ja"
 title = "熱帯魚 種類別ノート"
+# 使っていないタグ・カテゴリーのページを書き出さない（D3）
+disableKinds = ["taxonomy", "term"]
+# 警告が1件でも出たら書き出しを失敗にする（FR9.1）
+panicOnWarning = true
 [params]
   description = "珍しい熱帯魚を1種類ずつ、論文・海外の繁殖報告・飼育記録から調べてまとめるサイト"
 [markup.goldmark.renderer]
   unsafe = true
+[markup.goldmark.parser.attribute]
+  block = true   # 表の下の {caption="…"} で表の名前を付ける
+  title = true   # 見出しの {#id}
 [params.test]
   noindex = true   # テスト公開中は検索エンジンに載せない
+# フッターに並べる付属ページ（pageRef は content の中の場所）
+[[menus.main]]
+  name = "種の一覧"
+  pageRef = "/species"
+  weight = 10
+[[menus.main]]
+  name = "比較"
+  pageRef = "/compare"
+  weight = 20
+[[menus.main]]
+  name = "用語集"
+  pageRef = "/glossary"
+  weight = 30
+[[menus.main]]
+  name = "更新履歴"
+  pageRef = "/updates"
+  weight = 40

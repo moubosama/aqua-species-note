@@ -1,0 +1,26 @@
+[
+  {
+    "uuid": "01a1e312-28d7-72fc-9c3a-91dde78cc6e4",
+    "slug": "species-research-site",
+    "dirName": "261116-species-research-site",
+    "scope": "bugfix",
+    "status": "complete",
+    "request": "9e0a49f7"
+  },
+  {
+    "uuid": "01a1e6c3-8bc6-77ae-bd6e-16e45b016855",
+    "slug": "verify-zebrina-sources",
+    "dirName": "261116-verify-zebrina-sources",
+    "scope": "bugfix",
+    "status": "complete",
+    "request": "3e15d342"
+  },
+  {
+    "uuid": "01a1e8fb-3443-7c79-be0e-20cb1d279969",
+    "slug": "review-fixes",
+    "dirName": "261117-review-fixes",
+    "scope": "bugfix",
+    "status": "complete",
+    "request": "2387b05d"
+  }
+]

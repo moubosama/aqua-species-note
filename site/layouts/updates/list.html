@@ -1,0 +1,14 @@
+{{ define "main" }}
+{{- /* 更新履歴。各ページの更新日（lastmod）から新しい順に自動で並べる（FR4.1）。 */ -}}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+<div class="scroll" tabindex="0" role="region" aria-label="更新履歴">
+<table class="updates"><caption>更新履歴（更新日の新しい順）</caption>
+<thead><tr><th scope="col">更新日</th><th scope="col">ページ</th><th scope="col">公開日</th></tr></thead>
+<tbody>
+{{- range site.RegularPages.ByLastmod.Reverse }}
+<tr><td><time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2006-01-02" }}</time></td><td><a href="{{ .RelPermalink }}">{{ .Title }}</a></td><td><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time></td></tr>
+{{- end }}
+</tbody></table>
+</div>
+{{ end }}

@@ -1,0 +1,24 @@
+{{- /*
+  参考文献の番号付きリストの各項目に id="ref-n" を付ける（FR1.4）。
+  引数: 本文の HTML。見出し「参考文献 {#references}」より後ろの <ol> だけを対象にし、
+  分類ごとに分かれたリスト（<ol start="4"> など）の番号を、そのまま id に使う。
+*/ -}}
+{{- $c := string . -}}
+{{- $marker := `<h2 id="references">` -}}
+{{- if in $c $marker -}}
+  {{- $parts := split $c $marker -}}
+  {{- $tail := index $parts 1 -}}
+  {{- range findRESubmatch `(?s)<ol(?: start="(\d+)")?>(.*?)</ol>` $tail -}}
+    {{- $start := 1 -}}
+    {{- with index . 1 }}{{ $start = int . }}{{ end -}}
+    {{- $items := after 1 (split (index . 2) "<li>") -}}
+    {{- $new := "" -}}
+    {{- range $i, $item := $items -}}
+      {{- $new = printf `%s<li id="ref-%d">%s` $new (add $start $i) $item -}}
+    {{- end -}}
+    {{- $open := cond (eq $start 1) "<ol>" (printf `<ol start="%d">` $start) -}}
+    {{- $tail = replace $tail (index . 0) (printf "%s%s</ol>" $open $new) -}}
+  {{- end -}}
+  {{- $c = print (index $parts 0) $marker $tail -}}
+{{- end -}}
+{{- return ($c | safeHTML) -}}

@@ -2,14 +2,24 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{{ if not .IsHome }}{{ .Title }} | {{ end }}{{ site.Title }}</title>
-<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+{{- $title := partial "pagetitle.html" . }}
+{{- $desc := .Description | default site.Params.description }}
+<title>{{ if not .IsHome }}{{ $title }} | {{ end }}{{ site.Title }}</title>
+<meta name="description" content="{{ $desc }}">
 {{ if site.Params.test.noindex }}<meta name="robots" content="noindex,nofollow">{{ end }}
+<link rel="canonical" href="{{ .Permalink }}">
+{{ partial "ogp.html" (dict "page" . "title" $title "description" $desc) }}
+{{- if and .IsPage (eq .Section "species") }}
+{{ partial "jsonld.html" . }}
+{{- end }}
 <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
 </head>
 <body>
-<header class="site"><a href="{{ "/" | relURL }}">{{ site.Title }}</a></header>
+<header class="site"><a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a></header>
 <main>{{ block "main" . }}{{ end }}</main>
-<footer class="site">情報は各ページの更新日時点のものです。飼育は自己責任でお願いします。</footer>
+<footer class="site">
+<p>情報は各ページの更新日時点のものです。飼育は自己責任でお願いします。</p>
+<nav aria-label="付属ページ"><ul class="links">{{ range site.Menus.main }}<li><a href="{{ .URL }}">{{ .Name }}</a></li>{{ end }}</ul></nav>
+</footer>
 </body>
 </html>

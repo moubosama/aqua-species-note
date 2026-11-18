@@ -1,0 +1,6 @@
+{{- /* 学名。原稿の *…* で囲んだ属名・種小名だけを <i> で斜体にする（FR1.6）。値がなければ空。 */ -}}
+{{- $html := "" -}}
+{{- with .Params.scientific -}}
+  {{- $html = . | markdownify | replaceRE `<(/?)em>` `<${1}i>` -}}
+{{- end -}}
+{{- return ($html | safeHTML) -}}

@@ -1,0 +1,18 @@
+{{ define "main" }}
+{{- /* 種ページ（全種共通の型）。章の見出しは原稿に {#id} 付きで書く（site/archetypes/species.md）。 */ -}}
+<article>
+<h1>{{ .Title }}</h1>
+{{ with partial "sci.html" . }}<p class="sci">{{ . }}</p>{{ end }}
+<p class="updated">公開日 <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time> / 更新日 <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2006-01-02" }}</time></p>
+{{ partial "facts.html" . }}
+{{ partial "toc.html" . }}
+{{- $content := string .Content -}}
+{{- /* 「4. 繁殖記録の比較」の見出しのすぐ下に、繁殖記録の表を入れる */ -}}
+{{- with findRE `<h2 id="breeding">.*?</h2>` $content 1 -}}
+  {{- $heading := index . 0 -}}
+  {{- $content = replace $content $heading (print $heading (partial "breeding.html" $)) -}}
+{{- end -}}
+{{- $content = partial "cite.html" (dict "html" $content "base" "") -}}
+{{ partial "refs.html" $content }}
+</article>
+{{ end }}

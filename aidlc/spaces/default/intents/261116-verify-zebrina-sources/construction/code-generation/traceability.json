@@ -1,0 +1,145 @@
+{
+  "stage": "code-generation",
+  "upstream_ids": [
+    "FR1.1",
+    "FR1.2",
+    "FR1.3",
+    "FR1.4",
+    "FR1.5",
+    "FR1.6",
+    "FR2.1",
+    "FR2.2",
+    "FR2.3",
+    "FR2.4",
+    "FR2.5",
+    "FR2.6",
+    "FR2.7",
+    "FR3.1",
+    "FR3.2",
+    "FR3.3",
+    "FR3.4",
+    "NFR1",
+    "NFR2",
+    "NFR3",
+    "NFR4",
+    "NFR5",
+    "NFR6"
+  ],
+  "coverage": [
+    {
+      "id": "FR1.1",
+      "status": "OK",
+      "target": "aidlc/spaces/default/intents/261116-verify-zebrina-sources/construction/source-check/source-check-log.md"
+    },
+    {
+      "id": "FR1.2",
+      "status": "OK",
+      "target": "aidlc/spaces/default/intents/261116-verify-zebrina-sources/construction/source-check/source-check-log.md"
+    },
+    {
+      "id": "FR1.3",
+      "status": "OK",
+      "target": "aidlc/spaces/default/intents/261116-verify-zebrina-sources/construction/source-check/source-check-log.md"
+    },
+    {
+      "id": "FR1.4",
+      "status": "OK",
+      "target": "aidlc/spaces/default/intents/261116-verify-zebrina-sources/construction/source-check/source-check-log.md"
+    },
+    {
+      "id": "FR1.5",
+      "status": "OK",
+      "target": "aidlc/spaces/default/intents/261116-verify-zebrina-sources/construction/source-check/source-check-log.md"
+    },
+    {
+      "id": "FR1.6",
+      "status": "OK",
+      "target": "aidlc/spaces/default/intents/261116-verify-zebrina-sources/construction/source-check/source-check-log.md"
+    },
+    {
+      "id": "FR2.1",
+      "status": "OK",
+      "target": "site/content/species/corydoras-cw111-zebrina.md"
+    },
+    {
+      "id": "FR2.2",
+      "status": "OK",
+      "target": "site/content/species/corydoras-cw111-zebrina.md"
+    },
+    {
+      "id": "FR2.3",
+      "status": "OK",
+      "target": "site/content/species/corydoras-cw111-zebrina.md"
+    },
+    {
+      "id": "FR2.4",
+      "status": "OK",
+      "target": "site/content/species/corydoras-cw111-zebrina.md"
+    },
+    {
+      "id": "FR2.5",
+      "status": "OK",
+      "target": "site/content/species/corydoras-cw111-zebrina.md"
+    },
+    {
+      "id": "FR2.6",
+      "status": "OK",
+      "target": "tools/check/checks/frontmatter.py"
+    },
+    {
+      "id": "FR2.7",
+      "status": "OK",
+      "target": "site/content/species/corydoras-cw111-zebrina.md"
+    },
+    {
+      "id": "FR3.1",
+      "status": "OK",
+      "target": "tools/check/checks/frontmatter.py"
+    },
+    {
+      "id": "FR3.2",
+      "status": "OK",
+      "target": "tools/check/checks/frontmatter.py"
+    },
+    {
+      "id": "FR3.3",
+      "status": "OK",
+      "target": "tools/check/tests/test_frontmatter.py"
+    },
+    {
+      "id": "FR3.4",
+      "status": "OK",
+      "target": "tools/check/tests/test_frontmatter.py"
+    },
+    {
+      "id": "NFR1",
+      "status": "OK",
+      "target": "aidlc/spaces/default/intents/261116-verify-zebrina-sources/construction/source-check/source-check-log.md"
+    },
+    {
+      "id": "NFR2",
+      "status": "OK",
+      "target": "aidlc/spaces/default/intents/261116-verify-zebrina-sources/construction/source-check/source-check-log.md"
+    },
+    {
+      "id": "NFR3",
+      "status": "OK",
+      "target": "site/content/species/corydoras-cw111-zebrina.md"
+    },
+    {
+      "id": "NFR4",
+      "status": "OK",
+      "target": "docs/species/corydoras-cw111-zebrina/index.html"
+    },
+    {
+      "id": "NFR5",
+      "status": "OK",
+      "target": "tools/check/tests/test_frontmatter.py"
+    },
+    {
+      "id": "NFR6",
+      "status": "OK",
+      "target": "tools/check/checks/frontmatter.py"
+    }
+  ]
+}

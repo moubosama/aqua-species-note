@@ -1,0 +1,301 @@
+{
+  "stage": "code-generation",
+  "upstream_ids": [
+    "FR1.1",
+    "FR1.2",
+    "FR1.3",
+    "FR1.4",
+    "FR1.5",
+    "FR1.6",
+    "FR1.7",
+    "FR1.8",
+    "FR1.9",
+    "FR2.1",
+    "FR2.2",
+    "FR2.3",
+    "FR3.1",
+    "FR3.2",
+    "FR3.3",
+    "FR3.4",
+    "FR3.5",
+    "FR3.6",
+    "FR4.1",
+    "FR4.2",
+    "FR4.3",
+    "FR5.1",
+    "FR5.2",
+    "FR5.3",
+    "FR6.1",
+    "FR6.2",
+    "FR6.3",
+    "FR6.4",
+    "FR6.5",
+    "FR6.6",
+    "FR6.7",
+    "FR6.8",
+    "FR7.1",
+    "FR7.2",
+    "FR7.3",
+    "FR8.1",
+    "FR8.2",
+    "FR8.3",
+    "FR9.1",
+    "FR9.2",
+    "FR9.3",
+    "FR9.4",
+    "FR9.5",
+    "NFR1",
+    "NFR2",
+    "NFR3",
+    "NFR4",
+    "NFR5",
+    "NFR6"
+  ],
+  "coverage": [
+    {
+      "id": "FR1.1",
+      "status": "OK",
+      "target": "site/layouts/species/single.html"
+    },
+    {
+      "id": "FR1.2",
+      "status": "OK",
+      "target": "site/layouts/partials/facts.html"
+    },
+    {
+      "id": "FR1.3",
+      "status": "OK",
+      "target": "site/layouts/partials/breeding.html"
+    },
+    {
+      "id": "FR1.4",
+      "status": "OK",
+      "target": "site/layouts/partials/cite.html"
+    },
+    {
+      "id": "FR1.5",
+      "status": "OK",
+      "target": "site/layouts/species/single.html"
+    },
+    {
+      "id": "FR1.6",
+      "status": "OK",
+      "target": "site/layouts/partials/sci.html"
+    },
+    {
+      "id": "FR1.7",
+      "status": "OK",
+      "target": "site/content/species/corydoras-cw111-zebrina.md"
+    },
+    {
+      "id": "FR1.8",
+      "status": "OK",
+      "target": "site/archetypes/species.md"
+    },
+    {
+      "id": "FR1.9",
+      "status": "OK",
+      "target": "tools/check/checks/regressions.py"
+    },
+    {
+      "id": "FR2.1",
+      "status": "OK",
+      "target": "site/content/species/corydoras-cw111-zebrina.md"
+    },
+    {
+      "id": "FR2.2",
+      "status": "OK",
+      "target": "tools/check/checks/regressions.py"
+    },
+    {
+      "id": "FR2.3",
+      "status": "OK",
+      "target": "site/content/species/corydoras-cw111-zebrina.md"
+    },
+    {
+      "id": "FR3.1",
+      "status": "OK",
+      "target": "site/layouts/_default/baseof.html"
+    },
+    {
+      "id": "FR3.2",
+      "status": "OK",
+      "target": "site/content/species/_index.md"
+    },
+    {
+      "id": "FR3.3",
+      "status": "OK",
+      "target": "site/hugo.toml"
+    },
+    {
+      "id": "FR3.4",
+      "status": "OK",
+      "target": "site/layouts/404.html"
+    },
+    {
+      "id": "FR3.5",
+      "status": "OK",
+      "target": "site/static/css/style.css"
+    },
+    {
+      "id": "FR3.6",
+      "status": "OK",
+      "target": "site/layouts/_default/list.html"
+    },
+    {
+      "id": "FR4.1",
+      "status": "OK",
+      "target": "site/layouts/updates/list.html"
+    },
+    {
+      "id": "FR4.2",
+      "status": "OK",
+      "target": "site/content/glossary/index.md"
+    },
+    {
+      "id": "FR4.3",
+      "status": "OK",
+      "target": "site/layouts/compare/single.html"
+    },
+    {
+      "id": "FR5.1",
+      "status": "OK",
+      "target": "site/layouts/partials/jsonld.html"
+    },
+    {
+      "id": "FR5.2",
+      "status": "OK",
+      "target": "site/layouts/partials/ogp.html"
+    },
+    {
+      "id": "FR5.3",
+      "status": "OK",
+      "target": "site/hugo.toml"
+    },
+    {
+      "id": "FR6.1",
+      "status": "OK",
+      "target": "notes/runbook.md"
+    },
+    {
+      "id": "FR6.2",
+      "status": "OK",
+      "target": "notes/runbook.md"
+    },
+    {
+      "id": "FR6.3",
+      "status": "OK",
+      "target": "notes/runbook.md"
+    },
+    {
+      "id": "FR6.4",
+      "status": "OK",
+      "target": "notes/runbook.md"
+    },
+    {
+      "id": "FR6.5",
+      "status": "OK",
+      "target": "notes/runbook.md"
+    },
+    {
+      "id": "FR6.6",
+      "status": "OK",
+      "target": "notes/runbook.md"
+    },
+    {
+      "id": "FR6.7",
+      "status": "OK",
+      "target": "notes/runbook.md"
+    },
+    {
+      "id": "FR6.8",
+      "status": "OK",
+      "target": ".gitignore"
+    },
+    {
+      "id": "FR7.1",
+      "status": "OK",
+      "target": "notes/next-10-candidates.md"
+    },
+    {
+      "id": "FR7.2",
+      "status": "OK",
+      "target": "notes/next-10-candidates.md"
+    },
+    {
+      "id": "FR7.3",
+      "status": "OK",
+      "target": ".gitignore"
+    },
+    {
+      "id": "FR8.1",
+      "status": "OK",
+      "target": ".github/workflows/check.yml"
+    },
+    {
+      "id": "FR8.2",
+      "status": "OK",
+      "target": "README.md"
+    },
+    {
+      "id": "FR8.3",
+      "status": "OK",
+      "target": "README.md"
+    },
+    {
+      "id": "FR9.1",
+      "status": "OK",
+      "target": "site/hugo.toml"
+    },
+    {
+      "id": "FR9.2",
+      "status": "OK",
+      "target": "tools/check/checks/regressions.py"
+    },
+    {
+      "id": "FR9.3",
+      "status": "OK",
+      "target": "tools/check/checks/links.py"
+    },
+    {
+      "id": "FR9.4",
+      "status": "OK",
+      "target": "tools/check/checks/citations.py"
+    },
+    {
+      "id": "FR9.5",
+      "status": "OK",
+      "target": "tools/check/run_checks.py"
+    },
+    {
+      "id": "NFR1",
+      "status": "OK",
+      "target": ".github/workflows/check.yml"
+    },
+    {
+      "id": "NFR2",
+      "status": "OK",
+      "target": "site/layouts/_default/baseof.html"
+    },
+    {
+      "id": "NFR3",
+      "status": "OK",
+      "target": ".github/workflows/check.yml"
+    },
+    {
+      "id": "NFR4",
+      "status": "OK",
+      "target": "tools/check/run_checks.py"
+    },
+    {
+      "id": "NFR5",
+      "status": "OK",
+      "target": "tools/check/checks/report.py"
+    },
+    {
+      "id": "NFR6",
+      "status": "OK",
+      "target": "site/static/css/style.css"
+    }
+  ]
+}

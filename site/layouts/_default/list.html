@@ -1,9 +1,13 @@
 {{ define "main" }}
+{{- /* トップと一覧のページ。種のカードはトップと種の一覧にだけ出す（FR3.6）。 */ -}}
 <h1>{{ .Title }}</h1>
 {{ .Content }}
-<ul class="cards">
-{{ range (where site.RegularPages "Section" "species") }}
-<li><a href="{{ .RelPermalink }}"><strong>{{ .Title }}</strong><span>{{ .Params.scientific }}</span><small>{{ .Description }}</small></a></li>
-{{ end }}
-</ul>
+{{- if or .IsHome (eq .Section "species") }}
+{{ partial "cards.html" . }}
+{{- else }}
+<ul>{{ range .Pages }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul>
+{{- end }}
+{{- if .IsHome }}
+<nav aria-label="付属ページ（本文）"><ul class="links">{{ range site.Menus.main }}<li><a href="{{ .URL }}">{{ .Name }}</a></li>{{ end }}</ul></nav>
+{{- end }}
 {{ end }}

@@ -1,0 +1,8 @@
+{{- /* 目次の項目。見出しの木をたどり、h2 だけを並べる（toc.html から呼ぶ）。 */ -}}
+{{- range . -}}
+  {{- if eq .Level 2 -}}
+<li><a href="#{{ .ID }}">{{ .Title | safeHTML }}</a></li>
+  {{- else if lt .Level 2 -}}
+    {{- partial "toc-items.html" .Headings -}}
+  {{- end -}}
+{{- end -}}

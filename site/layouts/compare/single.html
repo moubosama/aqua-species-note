@@ -1,0 +1,30 @@
+{{ define "main" }}
+{{- /*
+  種をまたいだ比較（FR4.3、R-02）。各種ページの [[breeding]] から要約を作り、手では書かない。
+  数字の幅は kind = "本種" の記録だけで作る。近縁種・推論の記録は件数だけを示す。
+*/ -}}
+<h1>{{ .Title }}</h1>
+<p class="updated">更新日 <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2006-01-02" }}</time></p>
+{{ .Content }}
+{{- $species := (where site.RegularPages "Section" "species").ByParam "yomi" }}
+<div class="scroll" tabindex="0" role="region" aria-label="種ごとの繁殖記録の要約">
+<table class="compare"><caption>種ごとの繁殖記録の要約</caption>
+<thead><tr><th scope="col">種</th><th scope="col">繁殖記録の件数</th><th scope="col">孵化までの日数の幅</th><th scope="col">卵の数の幅（1回）</th><th scope="col">水温の幅</th><th scope="col">更新日</th></tr></thead>
+<tbody>
+{{- range $page := $species }}
+{{- $rows := $page.Params.breeding | default slice }}
+{{- $own := where $rows "kind" "本種" }}
+{{- $others := sub (len $rows) (len $own) }}
+<tr><th scope="row"><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></th>
+<td>{{ len $own }}件{{ with $others }}（近縁種・推論の記録 {{ . }}件は幅に含めない）{{ end }}</td>
+<td>{{ partial "range.html" (dict "rows" $own "min" "hatch_days_min" "max" "hatch_days_max" "unit" "日" "page" $page) }}</td>
+<td>{{ partial "range.html" (dict "rows" $own "min" "eggs_min" "max" "eggs_max" "unit" "個" "page" $page) }}</td>
+<td>{{ partial "range.html" (dict "rows" $own "min" "temp_min" "max" "temp_max" "unit" "℃" "page" $page) }}</td>
+<td><time datetime="{{ $page.Lastmod.Format "2006-01-02" }}">{{ $page.Lastmod.Format "2006-01-02" }}</time></td></tr>
+{{- end }}
+</tbody></table>
+</div>
+{{- if eq (len $species) 1 }}
+<p>いまは1種だけです。種が増えると並びます。</p>
+{{- end }}
+{{ end }}

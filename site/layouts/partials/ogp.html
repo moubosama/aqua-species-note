@@ -1,0 +1,8 @@
+{{- /* SNS で共有されたときのタイトル・説明（OGP）。引数: page、title、description（FR5.2） */ -}}
+{{- $p := .page }}
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:type" content="{{ if $p.IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ .title }}">
+<meta property="og:description" content="{{ .description }}">
+<meta property="og:url" content="{{ $p.Permalink }}">

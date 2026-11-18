@@ -1,0 +1,37 @@
+{{- /*
+  本文などの［n］を、参考文献 n 番（id="ref-n"）へのリンクに変える（FR1.4、R-06）。
+  引数: html（変える HTML）、base（参考文献のあるページの URL。同じページなら ""）。
+  - ［n］と［4〜9］（範囲）は、全体を1つのリンクにする。範囲は先頭の番号へリンクする。
+  - ［5、6］［5, 6］［4〜6、9］のように番号を区切って並べたものは、番号（範囲）ごとにリンクにし、
+    ［ ］と区切りの文字（「、」「,」「，」と空白）はリンクの外にそのまま残す（D2、FR2）。
+  - HTML をタグ（<…>）とタグの外の文字に分け、タグの外の文字だけを変える。
+    属性の値（aria-label、alt、title など）の中の［n］はそのまま残す（D1、FR1）。
+  原稿の書き方は変えなくてよい。
+*/ -}}
+{{- $one := `［(\d+)((?:[〜～\-–]\d+)?)］` -}}
+{{- $many := `［\d+(?:[〜～\-–]\d+)?(?:[\s　]*[、,，][\s　]*\d+(?:[〜～\-–]\d+)?)+］` -}}
+{{- $link := printf `<a class="cite" href="%s#ref-${1}" aria-label="出典${1}${2}">［${1}${2}］</a>` .base -}}
+{{- $out := "" -}}
+{{- /* 1つ目の組はタグ、2つ目はタグの外の文字、3つ目はタグにならない「<」（文字を落とさないため） */ -}}
+{{- range findRESubmatch `(<[^>]*>)|([^<]+)|(<)` (string .html) -}}
+  {{- $text := index . 2 -}}
+  {{- if and $text (in $text "［") -}}
+    {{- $text = replaceRE $one $link $text -}}
+    {{- range $group := findRE $many $text -}}
+      {{- $links := "" -}}
+      {{- /* 番号（範囲を含む）と区切りの文字に分ける。1つ目・2つ目の組が番号と範囲、3つ目が区切り */ -}}
+      {{- range findRESubmatch `(\d+)((?:[〜～\-–]\d+)?)|(\D+)` (strings.TrimSuffix "］" (strings.TrimPrefix "［" $group)) -}}
+        {{- if index . 1 -}}
+          {{- $links = printf `%s<a class="cite" href="%s#ref-%s" aria-label="出典%s%s">%s%s</a>` $links $.base (index . 1) (index . 1) (index . 2) (index . 1) (index . 2) -}}
+        {{- else -}}
+          {{- $links = print $links (index . 3) -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $text = replace $text $group (print "［" $links "］") -}}
+    {{- end -}}
+    {{- $out = print $out $text -}}
+  {{- else -}}
+    {{- $out = print $out (index . 0) -}}
+  {{- end -}}
+{{- end -}}
+{{- return ($out | safeHTML) -}}

@@ -1,0 +1,25 @@
+{{- /*
+  本文（Markdown）の表。横スクロールの枠に入れ、表の下に書いた {caption="…"} を表の名前にする（FR3.5、M4、M6、M7）。
+  caption を書き忘れると、確認のプログラム（structure）が失敗にする。
+  ほかの属性（class など）は、値を htmlEscape で属性の形にエスケープしてから書く（D4、FR5）。
+  "（&#34;）や &（&amp;）が値に入っていても、属性が途中で切れない。
+*/ -}}
+{{- $caption := .Attributes.caption | default "" -}}
+<div class="scroll" tabindex="0" role="region" aria-label="{{ $caption | default "表" }}">
+<table
+  {{- range $k, $v := .Attributes }}
+    {{- if and $v (ne $k "caption") }}{{ printf " %s=\"%s\"" $k (htmlEscape (string $v)) | safeHTMLAttr }}{{ end }}
+  {{- end }}>
+{{- with $caption }}<caption>{{ . }}</caption>{{ end }}
+<thead>
+{{- range .THead }}
+<tr>{{ range . }}<th scope="col"{{ with .Alignment }} style="text-align:{{ . }}"{{ end }}>{{ .Text }}</th>{{ end }}</tr>
+{{- end }}
+</thead>
+<tbody>
+{{- range .TBody }}
+<tr>{{ range . }}<td{{ with .Alignment }} style="text-align:{{ . }}"{{ end }}>{{ .Text }}</td>{{ end }}</tr>
+{{- end }}
+</tbody>
+</table>
+</div>
