@@ -1,0 +1,8 @@
+{{- /* 参考文献の件数。本文の「参考文献 {#references}」より後ろの <li> を数える。引数はページ。 */ -}}
+{{- $c := string .Content -}}
+{{- $marker := `<h2 id="references">` -}}
+{{- $n := 0 -}}
+{{- if in $c $marker -}}
+  {{- $n = len (findRE `<li[ >]` (index (split $c $marker) 1)) -}}
+{{- end -}}
+{{- return $n -}}

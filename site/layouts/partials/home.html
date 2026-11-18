@@ -1,37 +1,65 @@
-{{- /* トップページ。見出しの一文は content/_index.md（英語版は _index.en.md）の tagline、紹介文はその本文から出す。
-  決まった言葉（ボタン・数字の読み方・作り方）は site/i18n/*.toml。 */ -}}
+{{- /* トップページ（デザイン案「熱帯魚 種類別ノート」2026-11-18 版）。
+  見出しは content/_index.md（英語版は _index.en.md）の tagline と tagline_accent（色を変える後半）、紹介文はその本文から出す。
+  決まった言葉（ボタン・数字の読み方・作り方）は site/i18n/*.toml。写真は使わない（自分で撮ったか許可を得たものだけ使う決まり）。 */ -}}
 {{- $first := index ((where site.RegularPages "Section" "species").ByLastmod.Reverse) 0 }}
-<section class="hero">
+{{- $check := `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>` | safeHTML }}
+{{- $arrow := `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>` | safeHTML }}
+<section class="hero wrap">
 <div class="hero-main">
-<p class="eyebrow">{{ T "eyebrow" }}</p>
-<h1>{{ with .Params.tagline }}{{ . }}{{ else }}{{ .Title }}{{ end }}</h1>
+<p class="eyebrow pill">{{ T "eyebrow" }}</p>
+<h1>{{ with .Params.tagline }}{{ . }}{{ else }}{{ .Title }}{{ end }}{{ with .Params.tagline_accent }}<br><span class="accent">{{ . }}</span>{{ end }}</h1>
 <div class="lead">{{ .Content }}</div>
+<ul class="points">
+<li>{{ $check }}{{ T "point1" }}</li>
+<li>{{ $check }}{{ T "point2" }}</li>
+<li>{{ $check }}{{ T "point3" }}</li>
+</ul>
 <div class="actions">
-{{- with $first }}<a class="btn primary" href="{{ .RelPermalink }}">{{ T "read_latest" }}</a>{{ end }}
+{{- with $first }}<a class="btn primary" href="{{ .RelPermalink }}">{{ T "read_latest" }}{{ $arrow }}</a>{{ end }}
 {{- with site.GetPage "/compare" }}<a class="btn" href="{{ .RelPermalink }}">{{ T "compare_species" }}</a>{{ end }}
 </div>
 </div>
-<aside class="howto" aria-labelledby="howto-title">
-<h2 id="howto-title">{{ T "howto_title" }}</h2>
+{{- with $first }}
+<a class="latest" href="{{ .RelPermalink }}">
+<span class="latest-band" aria-hidden="true">{{ partial "logo.html" 64 }}<span class="pill">{{ T "latest_note" }}</span></span>
+<span class="latest-body">
+<span class="meta">{{ T "updated" }} <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2006-01-02" }}</time></span>
+<strong>{{ .Title }}</strong>
+<span class="sci">{{ partial "sci.html" . }}</span>
+<span class="latest-foot"><span class="chips"><span class="chip">{{ T "refs_count" (partial "refcount.html" .) }}</span><span class="chip">{{ T "breeding_count" (len (.Params.breeding | default slice)) }}</span></span><span class="go">{{ T "read" }}{{ $arrow }}</span></span>
+</span>
+</a>
+{{- end }}
+</section>
+
+<section class="wrap legend-wrap" aria-labelledby="howto-title">
+<div class="legend">
+<div class="section-head"><h2 id="howto-title">{{ T "howto_title" }}</h2><p>{{ T "legend_sub" }}</p></div>
 <ul>
-<li><span class="num">{{ T "howto_ref_mark" }}</span><span>{{ T "howto_ref" }}</span></li>
+<li><span class="refmark">{{ T "howto_ref_mark" }}</span><span>{{ T "howto_ref" }}</span></li>
 <li><span class="badge ok">{{ T "badge_ok" }}</span><span>{{ T "howto_ok" }}</span></li>
 <li><span class="badge warn">{{ T "badge_warn" }}</span><span>{{ T "howto_warn" }}</span></li>
 <li><span class="badge none">{{ T "badge_none" }}</span><span>{{ T "howto_none" }}</span></li>
 </ul>
-</aside>
+</div>
 </section>
 
-<section aria-labelledby="notes-title">
-<h2 id="notes-title">{{ T "notes_title" }}</h2>
+<section class="band" aria-labelledby="notes-title">
+<div class="wrap">
+<div class="section-head">
+<div><p class="eyebrow">{{ T "notes_eyebrow" }}</p><h2 id="notes-title">{{ T "notes_title" }}</h2></div>
+{{- with site.GetPage "/species" }}<a class="more" href="{{ .RelPermalink }}">{{ T "all_species" }}{{ $arrow }}</a>{{ end }}
+</div>
 {{ partial "cards.html" . }}
+</div>
 </section>
 
-<section aria-labelledby="steps-title">
+<section class="wrap steps-wrap" aria-labelledby="steps-title">
+<p class="eyebrow">{{ T "steps_eyebrow" }}</p>
 <h2 id="steps-title">{{ T "steps_title" }}</h2>
 <ol class="steps">
-<li><p class="no">01</p><h3>{{ T "step1_title" }}</h3><p>{{ T "step1_text" }}</p></li>
-<li><p class="no">02</p><h3>{{ T "step2_title" }}</h3><p>{{ T "step2_text" }}</p></li>
-<li><p class="no">03</p><h3>{{ T "step3_title" }}</h3><p>{{ T "step3_text" }}</p></li>
+<li><span class="no">1</span><h3>{{ T "step1_title" }}</h3><p>{{ T "step1_text" }}</p></li>
+<li><span class="no">2</span><h3>{{ T "step2_title" }}</h3><p>{{ T "step2_text" }}</p></li>
+<li><span class="no">3</span><h3>{{ T "step3_title" }}</h3><p>{{ T "step3_text" }}</p></li>
 </ol>
 </section>

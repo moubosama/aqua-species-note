@@ -20,17 +20,18 @@
 {{ partial "jsonld.html" . }}
 {{- end }}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap">
 <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
 </head>
 <body>
+<a class="skip" href="#main">{{ T "skip" }}</a>
 <header class="site"><div class="wrap bar">
-<a class="brand" href="{{ site.Home.RelPermalink }}"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M4 16c4-6 10-8 16-6 3 1 5 3 7 6-2 3-4 5-7 6-6 2-12 0-16-6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="21" cy="15" r="1.6" fill="currentColor"/><path d="M4 16l-2-4M4 16l-2 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>{{ site.Title }}</span></a>
+<a class="brand" href="{{ site.Home.RelPermalink }}">{{ partial "logo.html" 22 }}<span>{{ site.Title }}</span></a>
 <nav aria-label="{{ T "site_nav" }}"><ul class="links">{{ range site.Menus.main }}<li><a href="{{ .URL }}"{{ if $.IsMenuCurrent "main" . }} aria-current="page"{{ end }}>{{ .Name }}</a></li>{{ end }}{{ partial "langswitch.html" . }}</ul></nav>
 </div></header>
-<main class="{{ if .IsHome }}home{{ else if and .IsPage (eq .Section "species") }}species{{ else }}page{{ end }}">{{ block "main" . }}{{ end }}</main>
+<main id="main" class="{{ if .IsHome }}home{{ else if and .IsPage (eq .Section "species") }}species{{ else }}page{{ end }}">{{ block "main" . }}{{ end }}</main>
 <footer class="site"><div class="wrap">
-<p class="brand-name">{{ site.Title }}</p>
+<p class="brand-name">{{ partial "logo.html" 20 }}<span>{{ site.Title }}</span></p>
 <p>{{ T "footer_note" }}</p>
 </div></footer>
 </body>

@@ -145,3 +145,41 @@ other = "The URL may have changed, or the page may have been removed."
 other = "Back to the top"
 [species_list]
 other = "Species list"
+
+# Words added with the design draft (2026-11-18)
+[skip]
+other = "Skip to content"
+[point1]
+other = "Every number has a source"
+[point2]
+other = "How well each record was checked is shown in three levels"
+[point3]
+other = "What cannot be checked is written as not known"
+[latest_note]
+other = "Latest note"
+[read]
+other = "Read"
+[refs_count]
+other = "{{ .Count }} references"
+[breeding_count]
+other = "{{ .Count }} breeding records"
+[legend_sub]
+other = "Every page uses the same marks"
+[notes_eyebrow]
+other = "SPECIES NOTES"
+[all_species]
+other = "See all species"
+[steps_eyebrow]
+other = "HOW WE WRITE"
+[breadcrumb]
+other = "You are here"
+[home]
+other = "Home"
+[see_breeding]
+other = "See breeding records"
+[compare_with]
+other = "Compare with other species"
+[back_to_top]
+other = "Back to top"
+[compare_eyebrow]
+other = "COMPARE"

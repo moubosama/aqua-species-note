@@ -141,3 +141,41 @@ other = "URL が変わったか、ページがなくなった可能性があり�
 other = "トップへ戻る"
 [species_list]
 other = "種の一覧"
+
+# デザイン案（2026-11-18）で足した言葉
+[skip]
+other = "本文へ移動"
+[point1]
+other = "数字には必ず出典を付けています"
+[point2]
+other = "確かめた度合いを3段階で表示します"
+[point3]
+other = "確かめられないことは「分かっていない」と書きます"
+[latest_note]
+other = "最新のノート"
+[read]
+other = "読む"
+[refs_count]
+other = "参考文献 {{ .Count }}件"
+[breeding_count]
+other = "繁殖記録 {{ .Count }}件"
+[legend_sub]
+other = "どのページでも同じ印を使っています"
+[notes_eyebrow]
+other = "SPECIES NOTES"
+[all_species]
+other = "すべての種を見る"
+[steps_eyebrow]
+other = "HOW WE WRITE"
+[breadcrumb]
+other = "現在地"
+[home]
+other = "トップ"
+[see_breeding]
+other = "繁殖記録を見る"
+[compare_with]
+other = "ほかの種と比べる"
+[back_to_top]
+other = "ページの先頭へ"
+[compare_eyebrow]
+other = "COMPARE"

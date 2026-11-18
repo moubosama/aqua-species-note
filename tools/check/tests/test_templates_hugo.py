@@ -133,6 +133,28 @@ class TemplatesWithHugoTest(unittest.TestCase):
         self.assertEqual(ja_cards, ["/aqua-species-note/species/test-fish/"])
         self.assertEqual(en_cards, ["/aqua-species-note/en/species/test-fish/"])
 
+    def test_design_2026_11_18(self):
+        # デザイン案（2026-11-18）: 章の番号は四角い印になるが、見出しの文字（「1. 」で始まる）は変わらない
+        page = self.page("species/test-fish/index.html")
+        h2 = [h for h in page.main().find_all("h2") if h.find("span", cls="no") is not None]
+        self.assertTrue(h2, "章の見出しに番号の印（span.no）がありません")
+        for h in h2:
+            self.assertRegex(" ".join(h.text().split()), r"^\d+\. ")
+        # 要点は表（table.facts）のまま。現在地と、目次の「ページの先頭へ」がある
+        self.assertIsNotNone(page.main().find("table", cls="facts"))
+        crumbs = page.main().find("nav", attrs={"aria-label": "現在地"})
+        self.assertEqual(crumbs.find("a").get("href"), "/aqua-species-note/")
+        self.assertIn("ページの先頭へ", page.main().find("nav", attrs={"aria-label": "目次"}).text())
+        # トップ: 3つの約束が空でなく、カードに参考文献と繁殖記録の件数が出る
+        home = self.page("index.html")
+        points = home.root.find("ul", cls="points").find_all("li")
+        self.assertEqual(len(points), 3)
+        self.assertTrue(all(li.text().strip() for li in points))
+        counts = home.root.find("ul", cls="cards").find("small", cls="counts").text()
+        self.assertRegex(counts, r"参考文献 \d+件 ・ 繁殖記録 \d+件")
+        en_counts = self.page("en/index.html").root.find("ul", cls="cards").find("small", cls="counts").text()
+        self.assertRegex(en_counts, r"\d+ references ・ \d+ breeding records")
+
 
 if __name__ == "__main__":
     unittest.main()

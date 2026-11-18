@@ -1,7 +1,8 @@
-{{- /* 目次の項目。見出しの木をたどり、h2 だけを並べる（toc.html から呼ぶ）。 */ -}}
+{{- /* 目次の項目。見出しの木をたどり、h2 だけを並べる（toc.html から呼ぶ）。
+  章の頭の番号（「4.」）は、左に小さく並べる印にする（文字は変えない）。 */ -}}
 {{- range . -}}
   {{- if eq .Level 2 -}}
-<li><a href="#{{ .ID }}">{{ .Title | safeHTML }}</a></li>
+<li><a href="#{{ .ID }}">{{ .Title | replaceRE `^(\d+)\. ` `<span class="n">${1}<span class="dot">.</span></span> ` | safeHTML }}</a></li>
   {{- else if lt .Level 2 -}}
     {{- partial "toc-items.html" .Headings -}}
   {{- end -}}

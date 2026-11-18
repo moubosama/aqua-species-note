@@ -1,5 +1,6 @@
-{{- /* 目次。本文の h2（章）から自動で作る。押すとその章へ移る。 */ -}}
+{{- /* 目次。本文の h2（章）から自動で作る。押すとその章へ移る。下に「ページの先頭へ」。 */ -}}
 <nav class="toc" aria-label="{{ T "toc" }}">
 <p class="toc-title">{{ T "toc" }}</p>
 <ul>{{ partial "toc-items.html" .Fragments.Headings }}</ul>
+<p class="toc-top"><a href="#main"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>{{ T "back_to_top" }}</a></p>
 </nav>
