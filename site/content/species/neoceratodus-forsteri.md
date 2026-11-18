@@ -70,6 +70,7 @@ failures = "記録なし"
 refs = "22, 24"
 kind = "本種"
 status = "確認済み"
+[photo]file = "neoceratodus-forsteri.jpg"alt = "オーストラリアハイギョ（Neoceratodus forsteri）"author = "タウナギ"license = "CC0 1.0（パブリックドメイン）"license_url = "https://creativecommons.org/publicdomain/zero/1.0/"source_url = "https://commons.wikimedia.org/wiki/File:Neoceratodus_forsteri_Nagoya1.jpg"note = "撮影者の説明では、2025年に名古屋港水族館で撮影した写真です。大きさを縮小して表示しています。種の名前は撮影者の記載によります。"
 +++
 ## 1. はじめに ― このページの作り方 {#intro}
 
