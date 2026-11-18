@@ -85,6 +85,15 @@ failures = "記録なし"
 refs = "9, 10"
 kind = "本種"
 status = "確認済み"
+
+[photo]
+file = "polypterus-endlicherii.jpg"
+alt = "ポリプテルス・エンドリケリー（Polypterus endlicherii）"
+author = "Harum K（harum.koh）"
+license = "CC BY-SA 2.0"
+license_url = "https://creativecommons.org/licenses/by-sa/2.0/"
+source_url = "https://commons.wikimedia.org/wiki/File:African_living_fossil_(15781444942).jpg"
+note = "撮影者の説明では、2014年に神戸・須磨の水族館で撮影した写真です。大きさを縮小して表示しています。種の名前は撮影者の記載によります。"
 +++
 ## 1. はじめに ― このページの作り方 {#intro}
 
