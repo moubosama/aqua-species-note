@@ -18,6 +18,9 @@
     <loc>https://moubosama.github.io/aqua-species-note/species/scleropages-formosus/</loc>
     <lastmod>2026-11-18T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://moubosama.github.io/aqua-species-note/species/apistogramma-elizabethae/</loc>
+    <lastmod>2026-11-18T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://moubosama.github.io/aqua-species-note/species/hypancistrus-l046-zebra/</loc>
     <lastmod>2026-11-18T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -33,6 +36,16 @@
   </url><url>
     <loc>https://moubosama.github.io/aqua-species-note/species/neoceratodus-forsteri/</loc>
     <lastmod>2026-11-18T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://moubosama.github.io/aqua-species-note/en/species/neoceratodus-forsteri/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="ja"
+                href="https://moubosama.github.io/aqua-species-note/species/neoceratodus-forsteri/"
+                />
   </url><url>
     <loc>https://moubosama.github.io/aqua-species-note/species/potamotrygon-diamond-polka/</loc>
     <lastmod>2026-11-18T00:00:00+00:00</lastmod>

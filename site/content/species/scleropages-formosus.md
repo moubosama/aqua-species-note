@@ -112,6 +112,15 @@ failures = "記録なし"
 refs = "3"
 kind = "本種"
 status = "未確認"
+
+[photo]
+file = "scleropages-formosus.jpg"
+alt = "アジアアロワナ（Scleropages formosus）"
+author = "Cheng-en Cheng"
+license = "CC BY-SA 2.0"
+license_url = "https://creativecommons.org/licenses/by-sa/2.0/"
+source_url = "https://commons.wikimedia.org/wiki/File:Scleropages_formosus_at_Taipei_Zoo_2007-07-11.jpg"
+note = "撮影者の説明では、2007年に台北市立動物園で撮影した写真です。色の型は書かれていません。大きさを縮小して表示しています。種の名前は撮影者の記載によります。"
 +++
 ## 1. はじめに ― このページの作り方 {#intro}
 
