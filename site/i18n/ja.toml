@@ -1,5 +1,7 @@
 # 画面に出る決まった言葉（日本語版）。英語版は en.toml。キーは両方で同じにする。
-# 確認のプログラム（tools/check/checks/site.py の LANGS）も同じ言葉を使うので、変えたらそちらも直す。
+# 確認のプログラム（tools/check/checks/site.py）もこのファイルを読み、表の列（col_*）・breeding_empty・toc・
+# published・updated・no_record の言葉で確かめる。言葉を変えても site.py を直す必要はない（キーを消すと確認が止まる）。
+# 章の名前・小見出し・種の一覧の見出し・言語の切り替えの文字は、site.py に書いてある。
 
 # 共通（ヘッダー・フッター・日付）
 [site_nav]

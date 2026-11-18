@@ -20,7 +20,9 @@
 {{ partial "jsonld.html" . }}
 {{- end }}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap">
+{{- /* 文字の形は表示を止めずに読む（読み終わるまではパソコンの文字で表示）。JavaScript を切っている人には noscript の中で読む。太さは CSS で使う 400・700・800 だけ */}}
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Noto+Sans+JP:wght@400;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Noto+Sans+JP:wght@400;700;800&display=swap"></noscript>
 <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
 </head>
 <body>

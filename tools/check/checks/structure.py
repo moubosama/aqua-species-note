@@ -1,6 +1,7 @@
 """ページの構造の確認（accessibility-checklist.md の M1〜M3・M6〜M10 と、種ページの型）。
 
 英語版（docs/en/ の下）のページは、英語の決まった言葉（site.py の EN）で確かめる。
+表の列・記録0件の文・目次・日付の行の言葉は、画面の言葉のファイル（site/i18n/*.toml）から読んだもの。
 """
 from __future__ import annotations
 
@@ -187,10 +188,11 @@ def _check_breeding(main: Element, rules: LangRules = JA) -> list[str]:
     table = main.find("table", cls="breeding")
     if table is None:
         empty = [p for p in main.find_all("p") if p.text().strip() == rules.breeding_empty_text]
-        return [] if empty else ["繁殖記録の表も、記録0件の文言もありません（FR1.3）"]
+        return [] if empty else [f"繁殖記録の表も、記録0件の文言「{rules.breeding_empty_text}」もありません（FR1.3）"]
     heads = [" ".join(th.text().split()) for th in table.find_all("th")]
     if heads != list(rules.breeding_columns):
-        return [f"繁殖記録の表の列が型と違います: {' / '.join(heads)}（FR1.3）"]
+        return [f"繁殖記録の表の列が型と違います: {' / '.join(heads)}"
+                f"（{' / '.join(rules.breeding_columns)} にする。FR1.3）"]
     body = table.find("tbody") or table
     return [f"繁殖記録の表の {i} 行目に空欄があります（「記録なし」と書く）"
             for i, tr in enumerate(body.find_all("tr"), start=1)
@@ -201,10 +203,9 @@ def _check_header(main: Element, rules: LangRules = JA) -> list[str]:
     problems = []
     dates = main.find("p", cls="updated")
     if dates is None or not rules.date_line.search(" ".join(dates.text().split())):
-        if rules.code == "ja":
-            problems.append("公開日と更新日（YYYY-MM-DD）がありません（FR1.5）")
-        else:
-            problems.append("公開日と更新日の行（Published YYYY-MM-DD / Updated YYYY-MM-DD）がありません（FR1.5）")
+        # 日付の行の言葉は、画面の言葉のファイル（published・updated）から作る（BR1.5）
+        problems.append(f"公開日と更新日の行（{rules.published} YYYY-MM-DD / {rules.updated} YYYY-MM-DD）"
+                        "がありません（FR1.5）")
     sci = main.find("p", cls="sci")
     if sci is None or sci.find("i") is None:
         problems.append("学名の行に、斜体にした属名（<i>）がありません（FR1.6）")

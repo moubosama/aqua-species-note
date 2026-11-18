@@ -2,6 +2,7 @@
 
 - CSS: .scroll に overflow-x:auto があり、表（table）に display:block がない。
 - HTML: どの表も横スクロールの枠（div.scroll）のすぐ中にある。
+- CSS: Google Fonts で読まない太さ（font-weight の 500・600）がない（BR2.3）。
 """
 from __future__ import annotations
 
@@ -14,6 +15,8 @@ from .site import Config, Page, Site
 NAME = "css"
 COMMENT = re.compile(r"/\*.*?\*/", re.S)
 TABLE_SELECTOR = re.compile(r"(^|[\s>+~])table($|[.:#\[\s])")
+# Google Fonts で読まない太さ（読むのは 400・700・800。BR2.1）
+UNLOADED_WEIGHTS = ("500", "600")
 
 
 def parse_rules(css: str) -> list[tuple[str, dict[str, str]]]:
@@ -71,6 +74,18 @@ def check_css(css: str) -> list[str]:
         tables = [s.strip() for s in selector.split(",") if TABLE_SELECTOR.search(s.strip())]
         if tables and decls.get("display") == "block":
             problems.append(f"表（{', '.join(tables)}）に display:block があります。表の幅が広がりません（D5）")
+    problems += check_font_weights(rules)
+    return problems
+
+
+def check_font_weights(rules: list[tuple[str, dict[str, str]]]) -> list[str]:
+    """Google Fonts で読まない太さ（500・600）が CSS に残っていないこと（BR2.3、BR2.4）。"""
+    problems = []
+    for selector, decls in rules:
+        value = decls.get("font-weight", "").removesuffix("!important")
+        if value in UNLOADED_WEIGHTS:
+            problems.append(f"{selector} の font-weight:{value} は読み込まない太さです"
+                            "（400・700・800 のどれかにする。BR2.3）")
     return problems
 
 

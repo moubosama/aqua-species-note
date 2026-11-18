@@ -28,12 +28,23 @@ CONFIG = Config(base_path=BASE, site_url=SITE_URL, noindex=True,
                 fact_keys=FACT_KEYS, fact_labels=FACT_LABELS, fact_labels_en=FACT_LABELS_EN)
 CHAPTER_IDS = ["intro", "identity", "habitat", "breeding", "care",
                "before-buying", "unknowns", "references"]
+# 正しい形の文字の読み込み（baseof.html と同じ。表示を止めない preload と、noscript の予備）
+FONT_HREF = ("https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800"
+             "&family=Noto+Sans+JP:wght@400;700;800&display=swap")
+FONT_LINKS = (
+    '<link rel="preconnect" href="https://fonts.googleapis.com">'
+    f'<link rel="preload" as="style" href="{FONT_HREF}" onload="this.onload=null;this.rel=\'stylesheet\'">'
+    f'<noscript><link rel="stylesheet" href="{FONT_HREF}"></noscript>'
+)
 
 
 def page_html(main: str, *, title: str = "ページ", url: str = SITE_URL,
               lang: str = "ja", head_extra: str = "", noindex: bool = True,
-              home_href: str = BASE, jsonld: str = "", nav: str = "") -> str:
-    """どのページにも共通の head・ヘッダー・フッターを付けた HTML。nav はヘッダーのメニューの中身。"""
+              home_href: str = BASE, jsonld: str = "", nav: str = "", fonts: str = FONT_LINKS) -> str:
+    """どのページにも共通の head・ヘッダー・フッターを付けた HTML。nav はヘッダーのメニューの中身。
+
+    fonts は文字の読み込みの部分（文字の読み込みのテストで差し替える）。
+    """
     robots = '<meta name="robots" content="noindex,nofollow">' if noindex else ""
     return (
         f'<!doctype html><html lang="{lang}"><head><meta charset="utf-8">'
@@ -43,7 +54,7 @@ def page_html(main: str, *, title: str = "ページ", url: str = SITE_URL,
         f'<meta property="og:title" content="{title}">'
         '<meta property="og:description" content="説明">'
         f'<meta property="og:url" content="{url}">'
-        f"{jsonld}{head_extra}"
+        f"{jsonld}{head_extra}{fonts}"
         f'<link rel="stylesheet" href="{BASE}css/style.css"></head><body>'
         f'<header class="site"><a href="{home_href}">熱帯魚 種類別ノート</a>'
         f'<nav><ul class="links">{nav}</ul></nav></header>'
@@ -56,7 +67,7 @@ def page_html(main: str, *, title: str = "ページ", url: str = SITE_URL,
 def facts_table(values: dict[str, str] | None = None, *, lang: str = "ja") -> str:
     values = values or {}
     labels = FACT_LABELS_EN if lang == "en" else FACT_LABELS
-    empty = "No record" if lang == "en" else "記録なし"
+    empty = LANGS[lang].no_record  # 画面の言葉のファイルの no_record（BR1.5）
     rows = "".join(
         f'<tr><th scope="row">{label}</th><td>{values.get(key, empty)}</td></tr>'
         for key, label in zip(FACT_KEYS, labels)
@@ -87,7 +98,7 @@ def species_main(*, chapters: list[str] | None = None, facts: str | None = None,
     if facts is None:
         facts = facts_table({"size": f"約4cm{cite(1)}"}, lang=lang)
     if breeding is None:
-        none = "No record" if lang == "en" else "記録なし"
+        none = rules.no_record
         breeding = breeding_table([["香港の繁殖者", "2020年10月", none, "換水", "23個",
                                     "5日", none, none, cite(2)]], lang=lang)
     if legal is None:
@@ -96,9 +107,9 @@ def species_main(*, chapters: list[str] | None = None, facts: str | None = None,
     if sci is None:
         sci = '<p class="sci"><i>Hoplisoma</i> sp. (CW111)</p>'
     if dates is None:
-        published, updated = ("Published", "Updated") if lang == "en" else ("公開日", "更新日")
-        dates = (f'<p class="updated">{published} <time datetime="2026-11-16">2026-11-16</time>'
-                 f' / {updated} <time datetime="2026-11-16">2026-11-16</time></p>')
+        # 日付の行の言葉は、画面の言葉のファイルの published・updated（BR1.5）
+        dates = (f'<p class="updated">{rules.published} <time datetime="2026-11-16">2026-11-16</time>'
+                 f' / {rules.updated} <time datetime="2026-11-16">2026-11-16</time></p>')
     if toc is None:
         toc = (f'<nav class="toc" aria-label="{rules.toc_label}"><ul>'
                + "".join(f'<li><a href="#{i}">{c}</a></li>' for i, c in zip(CHAPTER_IDS, chapters))

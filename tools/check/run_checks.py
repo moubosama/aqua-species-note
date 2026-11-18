@@ -4,7 +4,8 @@
 
     python tools/check/run_checks.py docs
 
-問題が1件でもあれば終了コード 1、設定や docs/ が読めないときは 2 で終わる。
+問題が1件でもあれば終了コード 1、設定（画面の言葉の site/i18n/*.toml を含む）や docs/ が
+読めないときは 2 で終わる。
 Python 3.11 以上の標準ライブラリだけで動く。
 """
 from __future__ import annotations
@@ -15,11 +16,19 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from checks import (  # noqa: E402
-    citations, css, frontmatter, links, regressions, seo, structure, translations,
-)
-from checks.report import Report  # noqa: E402
-from checks.site import Config, ConfigError, Site  # noqa: E402
+from checks.errors import ConfigError  # noqa: E402
+
+try:
+    # checks.site は読み込むときに site/i18n/*.toml を読む。言葉が足りなければ ConfigError になる（FR1.3）
+    from checks import (  # noqa: E402
+        citations, css, frontmatter, links, regressions, seo, structure, translations,
+    )
+    from checks.report import Report  # noqa: E402
+    from checks.site import Config, Site  # noqa: E402
+except ConfigError as exc:
+    sys.stderr.reconfigure(errors="backslashreplace")
+    print(f"確認を始められません: {exc}", file=sys.stderr)
+    sys.exit(2)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CHECKS = [frontmatter, structure, regressions, translations, links, citations, seo, css]

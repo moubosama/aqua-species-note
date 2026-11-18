@@ -8,9 +8,21 @@ from pathlib import Path
 from typing import Optional
 from urllib.parse import unquote, urlparse
 
+from .errors import ConfigError
 from .htmlpage import Element, parse_html
 
+# 画面の言葉のファイル（Hugo と同じ site/i18n/<言語>.toml を読む。FR1.1）
+I18N_DIR = Path(__file__).resolve().parents[3] / "site" / "i18n"
+# 繁殖記録の表の列のキー（表の列の順。FR1.3）
+BREEDING_COLUMN_KEYS = (
+    "col_who", "col_when", "col_water", "col_trigger", "col_eggs",
+    "col_hatch_days", "col_fry", "col_failures", "col_refs",
+)
+# 画面の言葉のファイルから必ず読むキー（BR1.1）。no_record はテストの補助だけが使う（BR1.5）
+REQUIRED_WORD_KEYS = BREEDING_COLUMN_KEYS + ("breeding_empty", "toc", "published", "updated", "no_record")
+
 # 種ページの章（見出しの先頭の文字）。設計の7章＋参考文献の順（R-04）。
+# 章の名前・小見出し・種の一覧の見出し・切り替えの文字は、今回はここに書いたまま残す（BR1.4）
 CHAPTERS = [
     "1. はじめに",
     "2. 正体",
@@ -24,19 +36,42 @@ CHAPTERS = [
 # 「6. 買う前に知っておくこと」の中に必ず置く小見出し（R-05）
 LEGAL_HEADING = "合法性と規制"
 LEGAL_SUBHEADINGS = ["分かっていること", "分かっていないこと", "日本の規制の確認日", "このページの立場"]
-# 繁殖記録の表の列（FR1.3）
-BREEDING_COLUMNS = [
-    "誰が", "いつ", "どんな水で", "きっかけ", "卵の数",
-    "孵化までの日数", "稚魚の育て方", "失敗例", "出典",
-]
-BREEDING_EMPTY_TEXT = "繁殖の記録はまだ見つかっていません。"
+# 言語ごとに、ここに書いたまま残す言葉（英語は english-version-spec.md と同じにする）
+FIXED_WORDS = {
+    "ja": {
+        "prefix": "",
+        "chapters": tuple(CHAPTERS),
+        "legal_heading": LEGAL_HEADING,
+        "legal_subheadings": tuple(LEGAL_SUBHEADINGS),
+        "species_list_title": "種の一覧",
+        "switch_text": "日本語",
+    },
+    "en": {
+        "prefix": "en/",
+        "chapters": (
+            "1. Introduction",
+            "2. Identity",
+            "3. Habitat",
+            "4. Breeding records compared",
+            "5. Keeping and breeding",
+            "6. Before you buy",
+            "7. What is still unknown",
+            "References",
+        ),
+        "legal_heading": "Legality and regulation",
+        "legal_subheadings": ("What is known", "What is not known",
+                              "Japanese regulations: date checked", "This page's position"),
+        "species_list_title": "Species list",
+        "switch_text": "English",
+    },
+}
 # 種ページ。英語版は en/ の下（english-version-spec.md）
 SPECIES_PAGE = re.compile(r"^(?:en/)?species/[^/]+/index\.html$")
 
 
 @dataclass(frozen=True)
 class LangRules:
-    """言語ごとの決まった言葉。画面の言葉は site/i18n/*.toml、英語は english-version-spec.md と同じにする。"""
+    """言語ごとの決まった言葉。表の列・日付・目次などは site/i18n/*.toml から読む（build_lang_rules）。"""
 
     code: str                 # <html lang> と hreflang の値
     prefix: str               # docs/ の中の場所（日本語版は根なので ""、英語版は "en/"）
@@ -49,46 +84,71 @@ class LangRules:
     toc_label: str
     species_list_title: str
     switch_text: str          # この言語へ移る切り替えのリンクの文字（hugo.toml の label）
+    published: str            # 日付の行の言葉（例: 公開日）
+    updated: str              # 日付の行の言葉（例: 更新日）
+    no_record: str            # 欄が空のときの言葉（例: 記録なし）。テストの補助が使う
 
 
-JA = LangRules(
-    code="ja",
-    prefix="",
-    chapters=tuple(CHAPTERS),
-    legal_heading=LEGAL_HEADING,
-    legal_subheadings=tuple(LEGAL_SUBHEADINGS),
-    breeding_columns=tuple(BREEDING_COLUMNS),
-    breeding_empty_text=BREEDING_EMPTY_TEXT,
-    date_line=re.compile(r"公開日\s*\d{4}-\d{2}-\d{2}\s*/\s*更新日\s*\d{4}-\d{2}-\d{2}"),
-    toc_label="目次",
-    species_list_title="種の一覧",
-    switch_text="日本語",
-)
-EN = LangRules(
-    code="en",
-    prefix="en/",
-    chapters=(
-        "1. Introduction",
-        "2. Identity",
-        "3. Habitat",
-        "4. Breeding records compared",
-        "5. Keeping and breeding",
-        "6. Before you buy",
-        "7. What is still unknown",
-        "References",
-    ),
-    legal_heading="Legality and regulation",
-    legal_subheadings=("What is known", "What is not known",
-                       "Japanese regulations: date checked", "This page's position"),
-    breeding_columns=("Who", "When", "Water", "Trigger", "Eggs",
-                      "Days to hatch", "Raising fry", "Failures", "Sources"),
-    breeding_empty_text="No breeding records have been found yet.",
-    date_line=re.compile(r"Published\s*\d{4}-\d{2}-\d{2}\s*/\s*Updated\s*\d{4}-\d{2}-\d{2}"),
-    toc_label="Contents",
-    species_list_title="Species list",
-    switch_text="English",
-)
-LANGS = {"ja": JA, "en": EN}
+def _read_toml(path: Path) -> dict:
+    try:
+        with path.open("rb") as f:
+            return tomllib.load(f)
+    except FileNotFoundError as exc:
+        raise ConfigError(f"{path} がありません") from exc
+    except tomllib.TOMLDecodeError as exc:
+        raise ConfigError(f"{path} を TOML として読めません: {exc}") from exc
+
+
+def read_words(path: Path) -> dict[str, str]:
+    """画面の言葉のファイルから、REQUIRED_WORD_KEYS の other の言葉を読む。
+
+    ファイルがない・キーがない・言葉が空のときは、古い言葉で続けずに ConfigError で止める（BR1.3）。
+    """
+    data = _read_toml(path)
+    words = {}
+    for key in REQUIRED_WORD_KEYS:
+        entry = data.get(key)
+        value = entry.get("other") if isinstance(entry, dict) else None
+        if not isinstance(value, str):
+            raise ConfigError(f"{path} に {key} がありません")
+        if not value.strip():
+            raise ConfigError(f"{path} に {key} がありません（言葉が空です）")
+        words[key] = value
+    return words
+
+
+def date_line_pattern(published: str, updated: str) -> re.Pattern:
+    """日付の行の型。言葉は re.escape で文字どおりに入れる（. や ( に特別な意味を持たせない。BR1.2）。"""
+    day = r"\s*\d{4}-\d{2}-\d{2}"
+    return re.compile(re.escape(published) + day + r"\s*/\s*" + re.escape(updated) + day)
+
+
+def build_lang_rules(i18n_dir: Path) -> dict[str, LangRules]:
+    """i18n のフォルダ（site/i18n/）の ja.toml・en.toml から、言語ごとの決まりごとを組み立てる（FR1.1）。"""
+    langs = {}
+    for code, fixed in FIXED_WORDS.items():
+        words = read_words(i18n_dir / f"{code}.toml")
+        langs[code] = LangRules(
+            code=code,
+            breeding_columns=tuple(words[key] for key in BREEDING_COLUMN_KEYS),
+            breeding_empty_text=words["breeding_empty"],
+            date_line=date_line_pattern(words["published"], words["updated"]),
+            toc_label=words["toc"],
+            published=words["published"],
+            updated=words["updated"],
+            no_record=words["no_record"],
+            **fixed,
+        )
+    return langs
+
+
+# 読み込むときに、リポジトリの site/i18n/ から組み立てる（使う側はいままでと同じ名前で使う）
+LANGS = build_lang_rules(I18N_DIR)
+JA = LANGS["ja"]
+EN = LANGS["en"]
+# 繁殖記録の表の列と、記録0件の文（日本語版）。使う側のため名前を残す
+BREEDING_COLUMNS = list(JA.breeding_columns)
+BREEDING_EMPTY_TEXT = JA.breeding_empty_text
 # 切り替え先の言語（2言語なので互いに相手を指す）
 OTHER_LANG = {"ja": "en", "en": "ja"}
 
@@ -103,10 +163,6 @@ def counterpart(rel: str) -> str:
     lang = page_lang(rel)
     bare = rel[len(LANGS[lang].prefix):]
     return LANGS[OTHER_LANG[lang]].prefix + bare
-
-
-class ConfigError(Exception):
-    """設定ファイルが読めない、または形がおかしいとき。"""
 
 
 @dataclass(frozen=True)
@@ -152,16 +208,6 @@ class Config:
             fact_labels=tuple(i["label"] for i in items),
             fact_labels_en=tuple(i["label_en"] for i in items),
         )
-
-
-def _read_toml(path: Path) -> dict:
-    try:
-        with path.open("rb") as f:
-            return tomllib.load(f)
-    except FileNotFoundError as exc:
-        raise ConfigError(f"{path} がありません") from exc
-    except tomllib.TOMLDecodeError as exc:
-        raise ConfigError(f"{path} を TOML として読めません: {exc}") from exc
 
 
 @dataclass

@@ -10,7 +10,7 @@ import unittest
 from pathlib import Path
 
 import helpers
-from checks import citations, structure, translations
+from checks import citations, seo, structure, translations
 from checks.site import Page, Site
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -67,6 +67,8 @@ class TemplatesWithHugoTest(unittest.TestCase):
         hrefs = [a.get("href") for a in compare.root.find_all("a", cls="cite")]
         for n in (5, 6, 7, 8):
             self.assertIn(f"/aqua-species-note/species/test-fish/#ref-{n}", hrefs)
+        # 文字の読み込み: 書き出したどのページも、表示を止めない形で太さ 400・700・800 を読む（BR2.4）
+        self.assertEqual({rel: seo.check_fonts(p) for rel, p in self.pages.items()}, {rel: [] for rel in self.pages})
 
     def test_no_cite_link_inside_attributes(self):
         # 指摘 1: 表の名前「相場［28］」は、caption の中だけがリンクになり、aria-label はそのまま
