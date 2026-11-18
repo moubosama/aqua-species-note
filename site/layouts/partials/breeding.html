@@ -1,5 +1,6 @@
 {{- /*
   繁殖記録の表（FR1.3）。フロントマターの [[breeding]] から作る。分からない欄は「記録なし」。
+  「誰が」の欄の頭に、確認の状態（status）の印を出す。
   出典は［n］の形で出し、ページ全体の出典リンクの処理（cite.html）でリンクになる。
 */ -}}
 {{- $rows := .Params.breeding -}}
@@ -11,7 +12,8 @@
 <thead><tr>{{ range $heads }}<th scope="col">{{ . }}</th>{{ end }}</tr></thead>
 <tbody>
 {{- range $row := $rows }}
-<tr>{{ range $keys }}<td>{{ with index $row . }}{{ . | markdownify }}{{ else }}記録なし{{ end }}</td>{{ end -}}
+{{- $badge := index (dict "確認済み" "ok" "要確認" "warn" "未確認" "none") ($row.status | default "") }}
+<tr>{{ range $keys }}<td>{{ if and (eq . "who") $badge }}<span class="badge {{ $badge }}">{{ $row.status }}</span>{{ end }}{{ with index $row . }}{{ . | markdownify }}{{ else }}記録なし{{ end }}</td>{{ end -}}
 <td>{{ range split $row.refs "," }}［{{ trim . " " }}］{{ end }}</td></tr>
 {{- end }}
 </tbody></table>

@@ -1,0 +1,36 @@
+{{- /* トップページ。見出しの一文は content/_index.md の tagline、紹介文はその本文から出す。 */ -}}
+{{- $first := index ((where site.RegularPages "Section" "species").ByLastmod.Reverse) 0 }}
+<section class="hero">
+<div class="hero-main">
+<p class="eyebrow">RARE TROPICAL FISH ・ FIELD NOTES</p>
+<h1>{{ with .Params.tagline }}{{ . }}{{ else }}{{ .Title }}{{ end }}</h1>
+<div class="lead">{{ .Content }}</div>
+<div class="actions">
+{{- with $first }}<a class="btn primary" href="{{ .RelPermalink }}">最新のノートを読む</a>{{ end }}
+{{- with site.GetPage "/compare" }}<a class="btn" href="{{ .RelPermalink }}">種をまたいで比べる</a>{{ end }}
+</div>
+</div>
+<aside class="howto" aria-labelledby="howto-title">
+<h2 id="howto-title">数字の読み方</h2>
+<ul>
+<li><span class="num">［番号］</span><span>出典の番号。押すと巻末の参考文献へ移ります。</span></li>
+<li><span class="badge ok">確認済み</span><span>原文で裏が取れた記録。</span></li>
+<li><span class="badge warn">要確認</span><span>字幕や伝聞から拾った数字。聞き違いの可能性があります。</span></li>
+<li><span class="badge none">未確認</span><span>元の資料を開けず、裏が取れていないもの。</span></li>
+</ul>
+</aside>
+</section>
+
+<section aria-labelledby="notes-title">
+<h2 id="notes-title">種のノート</h2>
+{{ partial "cards.html" . }}
+</section>
+
+<section aria-labelledby="steps-title">
+<h2 id="steps-title">このノートの作り方</h2>
+<ol class="steps">
+<li><p class="no">01</p><h3>世界中の記録を集める</h3><p>分類学の論文、海外フォーラムの繁殖日記、国内のブログや店の入荷記録まで集めます。</p></li>
+<li><p class="no">02</p><h3>原文で突き合わせる</h3><p>数字は原文で確かめ、確かめた度合いを「確認済み・要確認・未確認」で示します。</p></li>
+<li><p class="no">03</p><h3>自分の言葉でまとめる</h3><p>文章も写真も転載しません。分からないことは、分からないと書きます。</p></li>
+</ol>
+</section>
